@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { font-family: 'Inter', system-ui, sans-serif; scroll-behavior: smooth; }
+  * { box-sizing: border-box; }
+  :focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; }
+  ::selection { background: #BFDBFE; color: #1E3A8A; }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+}
+
+@layer utilities {
+  /* Scrollbar */
+  .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 3px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, #60A5FA 0%, #5BBDE4 50%, #93C5FD 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Grid background for hero */
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Glow effect */
+  .glow-blue {
+    box-shadow: 0 0 60px 20px rgba(37,99,235,0.12);
+  }
+}
