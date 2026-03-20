@@ -11,6 +11,7 @@
  */
 import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
+import { Prisma } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
 import { prisma } from '../../config/database';
 import { getPagination, buildMeta } from '../../utils/response';
@@ -97,14 +98,14 @@ export class TurnoService {
 
     const [data, total] = await Promise.all([
       prisma.turno.findMany({
-        where: where as Parameters<typeof prisma.turno.findMany>[0]['where'],
+        where: where as Prisma.TurnoWhereInput,
         skip,
         take,
         orderBy: [{ shiftDate: 'desc' }, { shiftNumber: 'desc' }],
         include: turnoInclude,
       }),
       prisma.turno.count({
-        where: where as Parameters<typeof prisma.turno.count>[0]['where'],
+        where: where as Prisma.TurnoWhereInput,
       }),
     ]);
 
@@ -219,7 +220,7 @@ export class TurnoService {
     }
 
     const agg = await prisma.turno.aggregate({
-      where: where as Parameters<typeof prisma.turno.aggregate>[0]['where'],
+      where: where as Prisma.TurnoWhereInput,
       _count: { id: true },
       _sum:   { kmOcupados: true, kmLibres: true, kmTotales: true, totalFichas: true },
       _avg:   { kmOcupados: true, kmLibres: true, kmTotales: true, totalFichas: true },

@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import { v4 as uuidv4 } from 'uuid';
-import { AlertType, AlertSeverity } from '@prisma/client';
+import { Prisma, AlertType, AlertSeverity } from '@prisma/client';
 import { prisma } from '../config/database';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -137,7 +137,7 @@ export async function runDocumentExpiryJob(): Promise<void> {
       type:      n.type,
       severity:  n.severity,
       message:   n.message,
-      metadata:  n.metadata as Parameters<typeof prisma.alertNotification.create>[0]['data']['metadata'],
+      metadata:  n.metadata as Prisma.InputJsonValue,
       readAt:    null,
       resolvedAt: null,
     })),

@@ -4,6 +4,7 @@ import { prisma } from '../../config/database';
 import { getPagination, buildMeta } from '../../utils/response';
 
 export const createAlertSchema = z.object({
+  name:          z.string().min(1).max(100),
   vehicleId:     z.string().uuid().optional(),
   driverId:      z.string().uuid().optional(),
   type:          z.enum([
@@ -50,6 +51,7 @@ export class AlertService {
       data: {
         id:            uuidv4(),
         companyId,
+        name:          data.name,
         vehicleId:     data.vehicleId,
         driverId:      data.driverId,
         type:          data.type,
