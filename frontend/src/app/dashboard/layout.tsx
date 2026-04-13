@@ -6,15 +6,23 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Sidebar } from '@/components/dashboard/Sidebar';
 import { Header }  from '@/components/dashboard/Header';
 import { PageLoader } from '@/components/ui/Spinner';
+import { useToast } from '@/components/ui/Toast';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { isLoggedIn, loading, user } = useAuth();
   const router = useRouter();
+  const { warning } = useToast();
 
   useEffect(() => {
     if (!loading && !isLoggedIn) router.replace('/login');
     if (!loading && isLoggedIn && user?.role === 'superroot') router.replace('/superadmin');
   }, [loading, isLoggedIn, user, router]);
+
+  useEffect(() => {
+    const handler = () => warning('Sesión expirada', 'Tu sesión ha expirado. Serás redirigido al inicio de sesión.');
+    window.addEventListener('auth:session-expired', handler);
+    return () => window.removeEventListener('auth:session-expired', handler);
+  }, [warning]);
 
   if (loading) {
     return (

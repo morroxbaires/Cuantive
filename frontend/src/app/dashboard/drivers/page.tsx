@@ -119,9 +119,26 @@ export default function DriversPage() {
               );
             }},
             { key: 'phone', label: 'Teléfono', render: (row) => (row as unknown as Driver).phone ?? '—' },
+            { key: 'vehicles', label: 'Vehículo asig.', render: (row) => {
+              const d = row as unknown as Driver;
+              if (!d.vehicles?.length) return <span className="text-slate-400">—</span>;
+              return (
+                <div className="flex flex-col gap-0.5">
+                  {d.vehicles.map(vd => (
+                    <span key={vd.vehicle.id} className="font-mono text-xs text-slate-700">{vd.vehicle.plate}</span>
+                  ))}
+                </div>
+              );
+            }},
             { key: 'active', label: 'Estado', render: (row) => {
               const d = row as unknown as Driver;
-              return <Badge variant={d.active ? 'success' : 'default'} dot>{d.active ? 'Activo' : 'Inactivo'}</Badge>;
+              const licExpired = d.licenseExpiry ? daysUntil(d.licenseExpiry) < 0 : false;
+              return (
+                <div className="flex flex-col gap-1">
+                  <Badge variant={d.active ? 'success' : 'default'} dot>{d.active ? 'Activo' : 'Inactivo'}</Badge>
+                  {licExpired && <Badge variant="warning">⚠ Lic. vencida</Badge>}
+                </div>
+              );
             }},
             { key: 'actions', label: '', width: '80px', render: (row) => {
               const d = row as unknown as Driver;

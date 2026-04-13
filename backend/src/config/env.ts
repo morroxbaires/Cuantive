@@ -11,7 +11,7 @@ export const env = {
   JWT_ACCESS_EXPIRES:  process.env.JWT_ACCESS_EXPIRES  || '15m',
   JWT_REFRESH_EXPIRES: process.env.JWT_REFRESH_EXPIRES || '7d',
   UPLOAD_DIR:          process.env.UPLOAD_DIR || 'uploads',
-  MAX_FILE_SIZE_MB:    parseInt(process.env.MAX_FILE_SIZE_MB || '5', 10),
+  MAX_FILE_SIZE_MB:    parseInt(process.env.MAX_FILE_SIZE_MB || '3', 10),
 } as const;
 
 if (env.NODE_ENV === 'production') {

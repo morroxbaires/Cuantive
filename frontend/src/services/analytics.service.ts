@@ -148,4 +148,14 @@ export const analyticsService = {
     p.set('limit', String(limit));
     return api.get<{ success: boolean; data: IrregularLoadRow[] }>(`/analytics/irregular-loads?${p}`).then(r => r.data.data);
   },
+
+  getDriversSiniestroRanking: (range?: DateRange) => {
+    const p = new URLSearchParams();
+    if (range?.from) p.set('from', range.from);
+    if (range?.to)   p.set('to',   range.to);
+    const qs = p.toString();
+    return api.get<{ success: boolean; data: { position: number; driverId: string; driver: string; totalCost: number; totalCount: number }[] }>(
+      `/analytics/drivers-siniestro-ranking${qs ? `?${qs}` : ''}`,
+    ).then(r => r.data.data);
+  },
 };

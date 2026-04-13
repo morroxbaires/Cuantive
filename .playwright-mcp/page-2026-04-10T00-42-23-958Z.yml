@@ -1,0 +1,328 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Cuantive inicio" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic "Cuantive — Operational Intelligence" [ref=e5]:
+          - img [ref=e6]
+          - generic [ref=e12]: CUANTIVE
+      - navigation [ref=e13]:
+        - link "Funcionalidades" [ref=e14] [cursor=pointer]:
+          - /url: "#beneficios"
+        - link "Cómo funciona" [ref=e15] [cursor=pointer]:
+          - /url: "#como-funciona"
+      - link "Iniciar sesión" [ref=e17] [cursor=pointer]:
+        - /url: /login
+        - text: Iniciar sesión
+        - img [ref=e18]
+  - generic [ref=e23]:
+    - generic [ref=e26]: Plataforma SaaS para gestión de flotas
+    - heading "Control total de tu flota con inteligencia operativa" [level=1] [ref=e27]
+    - paragraph [ref=e28]: Gestioná vehículos, conductores, combustible y mantenimiento desde un único dashboard. Reducí costos con datos reales, no estimaciones.
+    - generic [ref=e29]:
+      - link "Empezar gratis" [ref=e30] [cursor=pointer]:
+        - /url: /login
+        - text: Empezar gratis
+        - img [ref=e31]
+      - link "Ver cómo funciona" [ref=e33] [cursor=pointer]:
+        - /url: "#como-funciona"
+        - img [ref=e34]
+        - text: Ver cómo funciona
+    - generic [ref=e36]:
+      - generic [ref=e37]:
+        - img [ref=e38]
+        - text: Sin tarjeta de crédito
+      - generic [ref=e41]:
+        - img [ref=e42]
+        - text: Setup en 5 minutos
+      - generic [ref=e45]:
+        - img [ref=e46]
+        - text: Cancela cuando quieras
+    - generic [ref=e49]:
+      - generic [ref=e52]:
+        - img [ref=e54]
+        - generic [ref=e57]:
+          - paragraph [ref=e58]: Ahorro promedio
+          - paragraph [ref=e59]: "-22% en costos"
+      - generic [ref=e61]:
+        - img [ref=e63]
+        - generic [ref=e66]:
+          - paragraph [ref=e67]: Alertas activas
+          - paragraph [ref=e68]: 3 nuevas hoy
+      - generic [ref=e69]:
+        - generic [ref=e74]: app.cuantive.com/dashboard
+        - generic [ref=e75]:
+          - generic [ref=e76]:
+            - generic [ref=e80]: CUANTIVE
+            - generic [ref=e83]: Dashboard
+            - generic [ref=e86]: Analítica
+            - generic [ref=e89]: Vehículos
+            - generic [ref=e92]: Conductores
+            - generic [ref=e95]: Cargas
+            - generic [ref=e98]: Mantenimiento
+            - generic [ref=e101]: Alertas
+          - generic [ref=e102]:
+            - generic [ref=e103]:
+              - generic [ref=e104]:
+                - paragraph [ref=e105]: Vehículos
+                - paragraph [ref=e106]: "42"
+              - generic [ref=e107]:
+                - paragraph [ref=e108]: Conductores
+                - paragraph [ref=e109]: "38"
+              - generic [ref=e110]:
+                - paragraph [ref=e111]: Alertas
+                - paragraph [ref=e112]: "3"
+              - generic [ref=e113]:
+                - paragraph [ref=e114]: Costo/mes
+                - paragraph [ref=e115]: $284k
+            - generic [ref=e116]:
+              - paragraph [ref=e118]: Consumo mensual (L)
+              - generic [ref=e132]:
+                - paragraph [ref=e133]: Por vehículo
+                - img [ref=e135]
+                - generic [ref=e140]:
+                  - generic [ref=e143]: Camiones
+                  - generic [ref=e146]: Autos
+                  - generic [ref=e149]: Otros
+            - generic [ref=e150]:
+              - paragraph [ref=e151]: Alertas recientes
+              - generic [ref=e152]:
+                - generic [ref=e153]:
+                  - generic [ref=e155]: Mantenimiento vencido
+                  - generic [ref=e156]: ABC-1234
+                - generic [ref=e157]:
+                  - generic [ref=e159]: Licencia próxima
+                  - generic [ref=e160]: Juan R.
+                - generic [ref=e161]:
+                  - generic [ref=e163]: Consumo anómalo
+                  - generic [ref=e164]: DEF-5678
+  - generic [ref=e167]:
+    - generic [ref=e168]:
+      - img [ref=e170]
+      - generic [ref=e175]: "+500"
+      - generic [ref=e176]: Vehículos gestionados
+    - generic [ref=e177]:
+      - img [ref=e179]
+      - generic [ref=e181]: 98%
+      - generic [ref=e182]: Uptime garantizado
+    - generic [ref=e183]:
+      - img [ref=e185]
+      - generic [ref=e188]: "-22%"
+      - generic [ref=e189]: Reducción en costos
+    - generic [ref=e190]:
+      - img [ref=e192]
+      - generic [ref=e194]: 24/7
+      - generic [ref=e195]: Monitoreo continuo
+  - generic [ref=e197]:
+    - generic [ref=e198]:
+      - generic [ref=e199]: Todo lo que necesitás
+      - heading "Una plataforma completa para tu operación" [level=2] [ref=e200]
+      - paragraph [ref=e201]: Diseñado para empresas que quieren datos concretos, no planillas de Excel.
+    - generic [ref=e202]:
+      - generic [ref=e203]:
+        - img [ref=e205]
+        - heading "Control total de vehículos" [level=3] [ref=e210]
+        - paragraph [ref=e211]: "Registra toda tu flota: marcas, modelos, odómetro y documentación. Estado activo/inactivo en tiempo real."
+      - generic [ref=e212]:
+        - img [ref=e214]
+        - heading "Cargas de combustible" [level=3] [ref=e217]
+        - paragraph [ref=e218]: Registra cada carga con cálculo automático de km/litro. Detecta anomalías de consumo al instante.
+      - generic [ref=e219]:
+        - img [ref=e221]
+        - heading "Mantenimiento predictivo" [level=3] [ref=e223]
+        - paragraph [ref=e224]: Programa mantenimientos preventivos y correctivos. Recibe alertas antes de que el vehículo falle.
+      - generic [ref=e225]:
+        - img [ref=e227]
+        - heading "Gestión de conductores" [level=3] [ref=e232]
+        - paragraph [ref=e233]: Control de licencias, vencimientos y asignaciones. Detecta qué conductor genera más gasto.
+      - generic [ref=e234]:
+        - img [ref=e236]
+        - heading "Analítica inteligente" [level=3] [ref=e238]
+        - paragraph [ref=e239]: Dashboards con costo por km, consumo promedio, tendencias mensuales y comparativas por vehículo.
+      - generic [ref=e240]:
+        - img [ref=e242]
+        - heading "Alertas automáticas" [level=3] [ref=e245]
+        - paragraph [ref=e246]: Notificaciones configurables para vencimientos, anomalías y mantenimientos próximos por email o app.
+  - generic [ref=e248]:
+    - generic [ref=e249]:
+      - generic [ref=e250]: Proceso simple
+      - heading "Comenzá en 3 pasos" [level=2] [ref=e251]
+      - paragraph [ref=e252]: Sin integración compleja. Sin consultores. Sin semanas de implementación.
+    - generic [ref=e253]:
+      - generic [ref=e255]:
+        - generic [ref=e257]: "01"
+        - generic [ref=e258]:
+          - heading "Registrá tu flota" [level=3] [ref=e259]
+          - paragraph [ref=e260]: Cargá tus vehículos, conductores y datos de referencia en minutos. Importación masiva disponible.
+          - paragraph [ref=e261]: Sin instalaciones. Desde el navegador, en cualquier dispositivo.
+      - generic [ref=e262]:
+        - generic [ref=e264]: "02"
+        - generic [ref=e265]:
+          - heading "Registrá cargas y mantenimientos" [level=3] [ref=e266]
+          - paragraph [ref=e267]: Capturá cada carga de combustible, mantenimiento y gasto. Adjuntá comprobantes digitalizados.
+          - paragraph [ref=e268]: Cálculo automático de km/litro y detección de anomalías.
+      - generic [ref=e269]:
+        - generic [ref=e271]: "03"
+        - generic [ref=e272]:
+          - heading "Tomá decisiones con datos" [level=3] [ref=e273]
+          - paragraph [ref=e274]: Accedé a reportes de costo por vehículo, conductores eficientes y predicciones de mantenimiento.
+          - paragraph [ref=e275]: Reducí costos con información real, no estimaciones.
+  - generic [ref=e277]:
+    - generic [ref=e278]:
+      - generic [ref=e279]: Dashboard
+      - heading "Todo visible, todo controlado" [level=2] [ref=e280]
+      - paragraph [ref=e281]: Un dashboard diseñado para la toma de decisiones rápidas.
+    - generic [ref=e282]:
+      - generic [ref=e283]:
+        - img [ref=e285]
+        - paragraph [ref=e287]: Costo por km
+        - paragraph [ref=e288]: Calculado automáticamente por vehículo y período
+      - generic [ref=e289]:
+        - img [ref=e291]
+        - paragraph [ref=e293]: Consumo real
+        - paragraph [ref=e294]: Comparado contra referencia de eficiencia
+      - generic [ref=e295]:
+        - img [ref=e297]
+        - paragraph [ref=e299]: Anomalías
+        - paragraph [ref=e300]: Detección Z-score de cargas irregulares
+      - generic [ref=e301]:
+        - img [ref=e303]
+        - paragraph [ref=e306]: Mantenimiento
+        - paragraph [ref=e307]: Predicción de urgencia basada en km y fechas
+    - generic [ref=e311]:
+      - generic [ref=e316]: app.cuantive.com/dashboard
+      - generic [ref=e317]:
+        - generic [ref=e318]:
+          - generic [ref=e322]: CUANTIVE
+          - generic [ref=e325]: Dashboard
+          - generic [ref=e328]: Analítica
+          - generic [ref=e331]: Vehículos
+          - generic [ref=e334]: Conductores
+          - generic [ref=e337]: Cargas
+          - generic [ref=e340]: Mantenimiento
+          - generic [ref=e343]: Alertas
+        - generic [ref=e344]:
+          - generic [ref=e345]:
+            - generic [ref=e346]:
+              - paragraph [ref=e347]: Vehículos
+              - paragraph [ref=e348]: "42"
+            - generic [ref=e349]:
+              - paragraph [ref=e350]: Conductores
+              - paragraph [ref=e351]: "38"
+            - generic [ref=e352]:
+              - paragraph [ref=e353]: Alertas
+              - paragraph [ref=e354]: "3"
+            - generic [ref=e355]:
+              - paragraph [ref=e356]: Costo/mes
+              - paragraph [ref=e357]: $284k
+          - generic [ref=e358]:
+            - paragraph [ref=e360]: Consumo mensual (L)
+            - generic [ref=e374]:
+              - paragraph [ref=e375]: Por vehículo
+              - img [ref=e377]
+              - generic [ref=e382]:
+                - generic [ref=e385]: Camiones
+                - generic [ref=e388]: Autos
+                - generic [ref=e391]: Otros
+          - generic [ref=e392]:
+            - paragraph [ref=e393]: Alertas recientes
+            - generic [ref=e394]:
+              - generic [ref=e395]:
+                - generic [ref=e397]: Mantenimiento vencido
+                - generic [ref=e398]: ABC-1234
+              - generic [ref=e399]:
+                - generic [ref=e401]: Licencia próxima
+                - generic [ref=e402]: Juan R.
+              - generic [ref=e403]:
+                - generic [ref=e405]: Consumo anómalo
+                - generic [ref=e406]: DEF-5678
+  - generic [ref=e408]:
+    - heading "Preguntas frecuentes" [level=2] [ref=e410]
+    - generic [ref=e411]:
+      - group [ref=e412]:
+        - generic "¿Necesito instalar algo?" [ref=e413] [cursor=pointer]:
+          - text: ¿Necesito instalar algo?
+          - img [ref=e414]
+      - group [ref=e416]:
+        - generic "¿Mis datos están seguros?" [ref=e417] [cursor=pointer]:
+          - text: ¿Mis datos están seguros?
+          - img [ref=e418]
+      - group [ref=e420]:
+        - generic "¿Puedo migrar mi información existente?" [ref=e421] [cursor=pointer]:
+          - text: ¿Puedo migrar mi información existente?
+          - img [ref=e422]
+      - group [ref=e424]:
+        - generic "¿Qué pasa si necesito más vehículos?" [ref=e425] [cursor=pointer]:
+          - text: ¿Qué pasa si necesito más vehículos?
+          - img [ref=e426]
+  - generic [ref=e429]:
+    - generic "Cuantive — Operational Intelligence" [ref=e431]:
+      - img [ref=e432]
+      - generic [ref=e437]:
+        - generic [ref=e438]: CUANTIVE
+        - generic [ref=e439]: Operational Intelligence
+    - heading "Tomá el control de tu flota hoy mismo" [level=2] [ref=e440]
+    - paragraph [ref=e441]: Más de 500 vehículos ya son gestionados con Cuantive. Comenzá tu prueba gratuita en menos de 5 minutos.
+    - generic [ref=e442]:
+      - link "Empezar gratis ahora" [ref=e443] [cursor=pointer]:
+        - /url: /login
+        - text: Empezar gratis ahora
+        - img [ref=e444]
+      - link "Ya tengo cuenta → Iniciar sesión" [ref=e446] [cursor=pointer]:
+        - /url: /login
+    - generic [ref=e447]:
+      - img [ref=e448]
+      - img [ref=e450]
+      - img [ref=e452]
+      - img [ref=e454]
+      - img [ref=e456]
+      - generic [ref=e458]: "\"La mejor inversión operativa que hicimos\""
+  - contentinfo [ref=e459]:
+    - generic [ref=e460]:
+      - generic [ref=e461]:
+        - generic [ref=e462]:
+          - generic "Cuantive — Operational Intelligence" [ref=e463]:
+            - img [ref=e464]
+            - generic [ref=e470]: CUANTIVE
+          - paragraph [ref=e471]: Plataforma de gestión inteligente de flotas para empresas en Uruguay y la región.
+        - generic [ref=e472]:
+          - paragraph [ref=e473]: Producto
+          - list [ref=e474]:
+            - listitem [ref=e475]:
+              - link "Funcionalidades" [ref=e476] [cursor=pointer]:
+                - /url: "#beneficios"
+            - listitem [ref=e477]:
+              - link "Cómo funciona" [ref=e478] [cursor=pointer]:
+                - /url: "#como-funciona"
+            - listitem [ref=e479]:
+              - link "Dashboard" [ref=e480] [cursor=pointer]:
+                - /url: /login
+        - generic [ref=e481]:
+          - paragraph [ref=e482]: Empresa
+          - list [ref=e483]:
+            - listitem [ref=e484]:
+              - link "Sobre Cuantive" [ref=e485] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e486]:
+              - link "Blog" [ref=e487] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e488]:
+              - link "Contacto" [ref=e489] [cursor=pointer]:
+                - /url: mailto:hola@cuantive.com
+        - generic [ref=e490]:
+          - paragraph [ref=e491]: Legal
+          - list [ref=e492]:
+            - listitem [ref=e493]:
+              - link "Privacidad" [ref=e494] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e495]:
+              - link "Términos" [ref=e496] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e497]:
+              - link "Seguridad" [ref=e498] [cursor=pointer]:
+                - /url: "#"
+      - generic [ref=e499]:
+        - paragraph [ref=e500]: © 2026 Cuantive. Todos los derechos reservados. Hecho en Uruguay 🇺🇾
+        - generic [ref=e501]:
+          - img [ref=e502]
+          - generic [ref=e504]: Datos protegidos · SSL · Backups diarios

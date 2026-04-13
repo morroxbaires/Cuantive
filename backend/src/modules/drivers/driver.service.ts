@@ -48,6 +48,11 @@ export class DriverService {
           id: true, name: true, lastname: true, document: true,
           licenseCategory: true, licenseExpiry: true,
           phone: true, email: true, active: true, createdAt: true,
+          vehicles: {
+            select: {
+              vehicle: { select: { id: true, plate: true, name: true } },
+            },
+          },
         },
       }),
       prisma.driver.count({ where }),

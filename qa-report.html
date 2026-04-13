@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reporte QA — Cuantive</title>
+  <style>
+    :root {
+      --critical: #dc2626;
+      --critical-bg: #fef2f2;
+      --critical-border: #fca5a5;
+      --high: #ea580c;
+      --high-bg: #fff7ed;
+      --high-border: #fdba74;
+      --medium: #ca8a04;
+      --medium-bg: #fefce8;
+      --medium-border: #fde047;
+      --low: #2563eb;
+      --low-bg: #eff6ff;
+      --low-border: #93c5fd;
+      --base: #1e293b;
+      --muted: #64748b;
+      --surface: #f8fafc;
+      --card: #ffffff;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--surface);
+      color: var(--base);
+      line-height: 1.6;
+    }
+    /* ── Header ── */
+    .report-header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+      color: #fff;
+      padding: 40px 48px;
+    }
+    .report-header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .report-header p { color: #94a3b8; margin-top: 6px; font-size: 14px; }
+    .report-meta {
+      display: flex;
+      gap: 32px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .meta-item { display: flex; flex-direction: column; }
+    .meta-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; }
+    .meta-value { font-size: 16px; font-weight: 600; color: #e2e8f0; }
+    /* ── Summary pills ── */
+    .summary-bar {
+      display: flex;
+      gap: 12px;
+      padding: 24px 48px;
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      flex-wrap: wrap;
+    }
+    .pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1.5px solid;
+    }
+    .pill-critical { background: var(--critical-bg); color: var(--critical); border-color: var(--critical-border); }
+    .pill-high     { background: var(--high-bg);     color: var(--high);     border-color: var(--high-border); }
+    .pill-medium   { background: var(--medium-bg);   color: var(--medium);   border-color: var(--medium-border); }
+    .pill-low      { background: var(--low-bg);      color: var(--low);      border-color: var(--low-border); }
+    .pill-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    /* ── Layout ── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 12px 0 8px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e2e8f0;
+    }
+    /* ── Bug card ── */
+    .bug-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid #e2e8f0;
+      margin-bottom: 16px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .bug-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 20px 14px;
+      border-left: 4px solid;
+    }
+    .bug-header.critical { border-color: var(--critical); background: var(--critical-bg); }
+    .bug-header.high     { border-color: var(--high);     background: var(--high-bg); }
+    .bug-header.medium   { border-color: var(--medium);   background: var(--medium-bg); }
+    .bug-header.low      { border-color: var(--low);      background: var(--low-bg); }
+    .bug-id {
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 36px;
+      padding-top: 2px;
+      color: var(--muted);
+    }
+    .bug-main { flex: 1; }
+    .bug-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--base);
+      margin-bottom: 2px;
+    }
+    .bug-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      background: rgba(0,0,0,0.06);
+      color: var(--muted);
+    }
+    .severity-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    .badge-critical { background: var(--critical); color: #fff; }
+    .badge-high     { background: var(--high);     color: #fff; }
+    .badge-medium   { background: var(--medium);   color: #fff; }
+    .badge-low      { background: var(--low);      color: #fff; }
+    /* ── Bug body ── */
+    .bug-body { padding: 16px 20px 20px; }
+    .bug-description {
+      font-size: 14px;
+      color: #374151;
+      margin-bottom: 16px;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 640px) {
+      .two-col { grid-template-columns: 1fr; }
+      .summary-bar { padding: 16px 16px; }
+      .report-header { padding: 28px 16px; }
+      .container { padding: 24px 12px; }
+    }
+    .expected-actual {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .ea-row {
+      display: flex;
+      font-size: 13px;
+    }
+    .ea-label {
+      width: 80px;
+      padding: 8px 12px;
+      font-weight: 700;
+      background: #f1f5f9;
+      color: var(--muted);
+      border-right: 1px solid #e2e8f0;
+      flex-shrink: 0;
+    }
+    .ea-value { padding: 8px 12px; flex: 1; color: var(--base); }
+    .ea-row:not(:last-child) { border-bottom: 1px solid #e2e8f0; }
+    .ea-expected .ea-value { color: #16a34a; }
+    .ea-actual .ea-value { color: #dc2626; }
+    /* ── Steps ── */
+    .steps-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .steps-list {
+      list-style: none;
+      counter-reset: step-counter;
+    }
+    .steps-list li {
+      counter-increment: step-counter;
+      position: relative;
+      padding: 6px 0 6px 36px;
+      font-size: 13px;
+      color: #374151;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+    .steps-list li:last-child { border-bottom: none; }
+    .steps-list li::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 5px;
+      width: 22px;
+      height: 22px;
+      background: #0f172a;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    code {
+      font-family: "SFMono-Regular", Consolas, monospace;
+      background: #f1f5f9;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 12px;
+      color: #c026d3;
+    }
+    /* ── ToC ── */
+    .toc {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 32px;
+    }
+    .toc h2 { font-size: 14px; font-weight: 700; margin-bottom: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+    .toc-list { list-style: none; columns: 2; }
+    @media (max-width: 640px) { .toc-list { columns: 1; } }
+    .toc-list li { margin-bottom: 4px; }
+    .toc-list a {
+      font-size: 13px;
+      color: #3b82f6;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toc-list a:hover { text-decoration: underline; }
+    .toc-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    /* ── Footer ── */
+    .report-footer {
+      text-align: center;
+      padding: 32px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid #e2e8f0;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════ -->
+<div class="report-header">
+  <h1>Reporte de QA Funcional — Cuantive</h1>
+  <p>Testing funcional completo sobre todos los módulos de la aplicación de gestión de flotas</p>
+  <div class="report-meta">
+    <div class="meta-item">
+      <span class="meta-label">Fecha</span>
+      <span class="meta-value">10 de abril de 2026</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Tester</span>
+      <span class="meta-value">GitHub Copilot QA Agent</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Módulos testeados</span>
+      <span class="meta-value">9 de 9</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Total bugs</span>
+      <span class="meta-value">20 bugs encontrados</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Entorno</span>
+      <span class="meta-value">localhost:3000 (Next.js 14 + Express + PostgreSQL)</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Usuario de prueba</span>
+      <span class="meta-value">automation@gmail.com</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SUMMARY PILLS
+══════════════════════════════════════════ -->
+<div class="summary-bar">
+  <div class="pill pill-critical"><span class="pill-dot"></span> 1 CRÍTICO</div>
+  <div class="pill pill-high"><span class="pill-dot"></span> 3 ALTO</div>
+  <div class="pill pill-medium"><span class="pill-dot"></span> 9 MEDIO</div>
+  <div class="pill pill-low"><span class="pill-dot"></span> 7 BAJO</div>
+</div>
+
+<div class="container">
+
+  <!-- ── Table of Contents ── -->
+  <div class="toc">
+    <h2>Índice de bugs</h2>
+    <ul class="toc-list">
+      <li><a href="#b01"><span class="toc-dot" style="background:#dc2626"></span> B-01 · Sesión expira sin aviso</a></li>
+      <li><a href="#b02"><span class="toc-dot" style="background:#ea580c"></span> B-02 · Fecha -1 día (timezone)</a></li>
+      <li><a href="#b03"><span class="toc-dot" style="background:#ea580c"></span> B-03 · Conductor con licencia vencida sin restricción</a></li>
+      <li><a href="#b04"><span class="toc-dot" style="background:#ea580c"></span> B-04 · KM recorridos calcula delta de odómetro</a></li>
+      <li><a href="#b05"><span class="toc-dot" style="background:#ca8a04"></span> B-05 · Precio/L redondeado a entero</a></li>
+      <li><a href="#b06"><span class="toc-dot" style="background:#ca8a04"></span> B-06 · "EXCESO" label confuso en repostaje</a></li>
+      <li><a href="#b07"><span class="toc-dot" style="background:#ca8a04"></span> B-07 · "Consumo total: 0 u" — unidad inválida</a></li>
+      <li><a href="#b08"><span class="toc-dot" style="background:#ca8a04"></span> B-08 · Contador "0 próximos" en mantenimiento</a></li>
+      <li><a href="#b09"><span class="toc-dot" style="background:#ca8a04"></span> B-09 · Siniestros sin campo Estado / Tipo</a></li>
+      <li><a href="#b10"><span class="toc-dot" style="background:#ca8a04"></span> B-10 · Hora en satisfacción no persiste</a></li>
+      <li><a href="#b11"><span class="toc-dot" style="background:#ca8a04"></span> B-11 · Mejor/Peor puntuado muestra el mismo vehículo</a></li>
+      <li><a href="#b12"><span class="toc-dot" style="background:#ca8a04"></span> B-12 · "1 repostajes" — plural incorrecto en Análisis</a></li>
+      <li><a href="#b13"><span class="toc-dot" style="background:#ca8a04"></span> B-13 · "evaluaciónes" — tilde incorrecta en Satisfacción</a></li>
+      <li><a href="#b14"><span class="toc-dot" style="background:#2563eb"></span> B-14 · "1vehículos" / "2conductores" sin espacio</a></li>
+      <li><a href="#b15"><span class="toc-dot" style="background:#2563eb"></span> B-15 · "Superroot" vs "admin" — rol inconsistente</a></li>
+      <li><a href="#b16"><span class="toc-dot" style="background:#2563eb"></span> B-16 · Conductores sin columna "Vehículo asignado"</a></li>
+      <li><a href="#b17"><span class="toc-dot" style="background:#2563eb"></span> B-17 · Nombre vehículo duplicado en tabla Satisfacción</a></li>
+      <li><a href="#b18"><span class="toc-dot" style="background:#2563eb"></span> B-18 · Página survey con título duplicado</a></li>
+      <li><a href="#b19"><span class="toc-dot" style="background:#2563eb"></span> B-19 · KM / Rendimiento sin espacio entre número y unidad</a></li>
+      <li><a href="#b20"><span class="toc-dot" style="background:#2563eb"></span> B-20 · María López (licencia vencida) aparece como "Activo"</a></li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       CRÍTICOS
+  ══════════════════════════════════════════ -->
+  <div class="section-title" style="color:var(--critical)">🔴 CRÍTICO</div>
+
+  <!-- B-01 -->
+  <div class="bug-card" id="b01">
+    <div class="bug-header critical">
+      <div class="bug-id">B-01</div>
+      <div class="bug-main">
+        <div class="bug-title">Sesión expira silenciosamente y redirige a /login sin aviso</div>
+        <div class="bug-tags">
+          <span class="tag">Autenticación</span>
+          <span class="tag">UX</span>
+          <span class="tag">Todos los módulos</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-critical">Crítico</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        Cuando el token de acceso caduca (15 min) y el refresh falla, la aplicación redirige el usuario a <code>/login</code> sin mostrar ningún mensaje de error ni aviso previo. El usuario pierde su estado de trabajo actual sin explicación. No hay toasts, modal ni indicador de cuenta regresiva. El usuario puede estar llenando un formulario largo y perder toda la información al ser redirigido en silencio.
+      </p>
+      <div class="two-col">
+        <div>
+          <div class="steps-label">Pasos para reproducir</div>
+          <ol class="steps-list">
+            <li>Iniciar sesión con <code>automation@gmail.com</code></li>
+            <li>Navegar a cualquier módulo (ej: <code>/dashboard/maintenance</code>)</li>
+            <li>Esperar 15+ minutos sin interacción</li>
+            <li>Intentar hacer click en cualquier botón o navegar</li>
+          </ol>
+        </div>
+        <div class="expected-actual">
+          <div class="ea-row ea-expected">
+            <div class="ea-label">Esperado</div>
+            <div class="ea-value">Toast o modal informando "Tu sesión venció. Iniciá sesión nuevamente." con botón para re-autenticar</div>
+          </div>
+          <div class="ea-row ea-actual">
+            <div class="ea-label">Actual</div>
+            <div class="ea-value">Redirección silenciosa a <code>/login</code> sin aviso. Todo el trabajo no guardado se pierde.</div>
+          </div>
+        </div>
+      </div>
+      <div class="steps-label" style="margin-top:12px">Causa probable</div>
+      <p style="font-size:13px;color:#374151">El interceptor de Axios en <code>api.ts</code> maneja el error 401 pero no dispara ningún toast antes de redirigir. Falta integrar <code>useToast()</code> en el interceptor global.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ALTOS
+  ══════════════════════════════════════════ -->
+  <div class="section-title" style="color:var(--high)">🟠 ALTO</div>
+
+  <!-- B-02 -->
+  <div class="bug-card" id="b02">
+    <div class="bug-header high">
+      <div class="bug-id">B-02</div>
+      <div class="bug-main">
+        <div class="bug-title">Todas las fechas se muestran con 1 día de retraso (error de timezone UTC)</div>
+        <div class="bug-tags">
+          <span class="tag">Turnos</span>
+          <span class="tag">Repostaje</span>
+          <span class="tag">Mantenimiento</span>
+          <span class="tag">Siniestros</span>
+          <span class="tag">Satisfacción</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-high">Alto</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        Al ingresar una fecha en cualquier formulario (ej: <code>2026-04-10</code>), la tabla muestra <code>09/04/2026</code> (un día antes). El problema es sistémico y afecta a todos los módulos que tienen fecha. La causa es que la fecha se guarda como ISO string en UTC (<code>T00:00:00.000Z</code>) y al renderizarla con <code>new Date(...).toLocaleDateString()</code> en una zona horaria UTC-3 (Argentina/Uruguay), la medianoche UTC se convierte al día anterior.
+      </p>
+      <div class="two-col">
+        <div>
+          <div class="steps-label">Pasos para reproducir</div>
+          <ol class="steps-list">
+            <li>Ir a <code>/dashboard/turnos</code></li>
+            <li>Crear un turno con fecha <code>2026-04-10</code></li>
+            <li>Guardar y observar la fecha en la tabla</li>
+          </ol>
+        </div>
+        <div class="expected-actual">
+          <div class="ea-row ea-expected">
+            <div class="ea-label">Esperado</div>
+            <div class="ea-value"><code>10/04/2026</code></div>
+          </div>
+          <div class="ea-row ea-actual">
+            <div class="ea-label">Actual</div>
+            <div class="ea-value"><code>09/04/2026</code></div>
+          </div>
+        </div>
+      </div>
+      <div class="steps-label" style="margin-top:12px">Fix sugerido</div>
+      <p style="font-size:13px;color:#374151">Parsear fechas como <code>date + "T12:00:00"</code> (mediodía local) antes de guardar, o usar <code>parseISO</code> de date-fns con <code>format(parseISO(date), 'dd/MM/yyyy')</code> en lugar de <code>new Date()</code>. Alternativamente guardar sólo la parte date (<code>YYYY-MM-DD</code>) como string en la BD sin conversión UTC.</p>
+    </div>
+  </div>
+
+  <!-- B-03 -->
+  <div class="bug-card" id="b03">
+    <div class="bug-header high">
+      <div class="bug-id">B-03</div>
+      <div class="bug-main">
+        <div class="bug-title">Conductor con licencia vencida aparece sin restricción en dropdowns operativos</div>
+        <div class="bug-tags">
+          <span class="tag">Turnos</span>
+          <span class="tag">Repostaje</span>
+          <span class="tag">Siniestros</span>
+          <span class="tag">Validación</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-high">Alto</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        María López tiene licencia vencida desde el <code>14/01/2025</code>. Sin embargo, aparece disponible para selección en Turnos, Repostaje y Siniestros sin ningún aviso, badge de advertencia o restricción. Esto representa un riesgo operativo real: se puede asignar a un conductor inhabilitado legalmente a un turno o vehículo.
+      </p>
+      <div class="two-col">
+        <div>
+          <div class="steps-label">Pasos para reproducir</div>
+          <ol class="steps-list">
+            <li>Ir a <code>/dashboard/drivers</code> y crear un conductor con fecha de vencimiento de licencia pasada (ej: <code>14/01/2025</code>)</li>
+            <li>Ir a <code>/dashboard/turnos</code> → "Nuevo turno"</li>
+            <li>Abrir el dropdown "Conductor"</li>
+          </ol>
+        </div>
+        <div class="expected-actual">
+          <div class="ea-row ea-expected">
+            <div class="ea-label">Esperado</div>
+            <div class="ea-value">Conductor aparece deshabilitado o con badge "⚠ Licencia vencida" y no puede ser seleccionado</div>
+          </div>
+          <div class="ea-row ea-actual">
+            <div class="ea-label">Actual</div>
+            <div class="ea-value">Conductor aparece en la lista sin ningún indicador, puede ser seleccionado libremente</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B-04 -->
+  <div class="bug-card" id="b04">
+    <div class="bug-header high">
+      <div class="bug-id">B-04</div>
+      <div class="bug-main">
+        <div class="bug-title">KM recorridos en Dashboard calcula delta de odómetro, no distancia real de turnos</div>
+        <div class="bug-tags">
+          <span class="tag">Dashboard</span>
+          <span class="tag">Análisis</span>
+          <span class="tag">Cálculo de métricas</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-high">Alto</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        El Dashboard muestra <strong>500 km</strong> recorridos. Este número corresponde al delta entre el odómetro del registro de mantenimiento (<code>47.000 km</code>) y el odómetro actual del vehículo (<code>46.500 km</code>), <em>no</em> a los kilómetros reales registrados en Turnos. El único turno registrado tenía 150 km ocupados + 30 km libres = <strong>180 km</strong>. Usar odómetros de distintos módulos (mantenimiento, repostaje) para calcular KM produce resultados incoherentes y no auditables.
+      </p>
+      <div class="two-col">
+        <div>
+          <div class="steps-label">Pasos para reproducir</div>
+          <ol class="steps-list">
+            <li>Crear vehículo con odómetro inicial <code>45.000 km</code></li>
+            <li>Editar vehículo y cambiar odómetro a <code>46.500 km</code></li>
+            <li>Crear mantenimiento con odómetro <code>47.000 km</code></li>
+            <li>Crear turno con <code>180 km</code> total</li>
+            <li>Ir a Dashboard y observar KM recorridos</li>
+          </ol>
+        </div>
+        <div class="expected-actual">
+          <div class="ea-row ea-expected">
+            <div class="ea-label">Esperado</div>
+            <div class="ea-value"><code>180 km</code> (suma de km del módulo Turnos)</div>
+          </div>
+          <div class="ea-row ea-actual">
+            <div class="ea-label">Actual</div>
+            <div class="ea-value"><code>500 km</code> (calculado como delta entre odómetros de distintos registros)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MEDIOS
+  ══════════════════════════════════════════ -->
+  <div class="section-title" style="color:var(--medium)">🟡 MEDIO</div>
+
+  <!-- B-05 -->
+  <div class="bug-card" id="b05">
+    <div class="bug-header medium">
+      <div class="bug-id">B-05</div>
+      <div class="bug-main">
+        <div class="bug-title">Precio por litro redondeado a entero en tabla de Repostaje</div>
+        <div class="bug-tags">
+          <span class="tag">Repostaje</span>
+          <span class="tag">Formato numérico</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-medium">Medio</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        Al ingresar un precio de <code>$1.85/L</code> en el formulario de repostaje, la tabla muestra <code>$ 2</code> en lugar de <code>$ 1,85</code>. La columna de precio por unidad pierde los decimales, haciendo que los datos de costo por litro sean incorrectos e inútiles para análisis.
+      </p>
+      <div class="two-col">
+        <div>
+          <div class="steps-label">Pasos para reproducir</div>
+          <ol class="steps-list">
+            <li>Ir a <code>/dashboard/fuel-loads</code></li>
+            <li>Crear repostaje con precio/litro <code>1.85</code></li>
+            <li>Guardar y observar la columna "Precio/L" en la tabla</li>
+          </ol>
+        </div>
+        <div class="expected-actual">
+          <div class="ea-row ea-expected">
+            <div class="ea-label">Esperado</div>
+            <div class="ea-value"><code>$ 1,85</code></div>
+          </div>
+          <div class="ea-row ea-actual">
+            <div class="ea-label">Actual</div>
+            <div class="ea-value"><code>$ 2</code> (redondeado, decimales perdidos)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B-06 -->
+  <div class="bug-card" id="b06">
+    <div class="bug-header medium">
+      <div class="bug-id">B-06</div>
+      <div class="bug-main">
+        <div class="bug-title">Etiqueta "EXCESO" en rendimiento de repostaje es ambigua e inexacta</div>
+        <div class="bug-tags">
+          <span class="tag">Repostaje</span>
+          <span class="tag">UX / Copywriting</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-medium">Medio</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        Cuando el rendimiento km/L de un repostaje está por debajo de la referencia del vehículo, la tabla muestra la etiqueta <code>EXCESO</code>. Este término es technically "exceso de consumo" pero es contraintuitivo para los operarios: "exceso" sugiere que se cargó demasiado combustible, no que el rendimiento es bajo. La métrica debería indicar claramente que el vehículo consume más de lo esperado.
+      </p>
+      <div class="expected-actual">
+        <div class="ea-row ea-expected">
+          <div class="ea-label">Esperado</div>
+          <div class="ea-value"><code>ALTO CONSUMO</code> o <code>BAJO RENDIMIENTO</code> con color ámbar/rojo</div>
+        </div>
+        <div class="ea-row ea-actual">
+          <div class="ea-label">Actual</div>
+          <div class="ea-value"><code>EXCESO</code> sin contexto de a qué se refiere</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B-07 -->
+  <div class="bug-card" id="b07">
+    <div class="bug-header medium">
+      <div class="bug-id">B-07</div>
+      <div class="bug-main">
+        <div class="bug-title">"Consumo total: 0 u" — unidad "u" sin significado</div>
+        <div class="bug-tags">
+          <span class="tag">Repostaje</span>
+          <span class="tag">UX</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-medium">Medio</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        El KPI resumen del módulo Repostaje muestra <code>Consumo total: 0 u</code> cuando no hay datos filtrados. La unidad <code>u</code> es completamente inmemorable e inútil — debería mostrar <code>L</code> (litros) para combustible líquido o <code>kWh</code> para eléctrico, según la configuración del vehículo.
+      </p>
+      <div class="expected-actual">
+        <div class="ea-row ea-expected">
+          <div class="ea-label">Esperado</div>
+          <div class="ea-value"><code>0 L</code> o <code>0 kWh</code> según tipo de combustible</div>
+        </div>
+        <div class="ea-row ea-actual">
+          <div class="ea-label">Actual</div>
+          <div class="ea-value"><code>0 u</code> (unidad sin significado)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B-08 -->
+  <div class="bug-card" id="b08">
+    <div class="bug-header medium">
+      <div class="bug-id">B-08</div>
+      <div class="bug-main">
+        <div class="bug-title">Contador "0 próximos" no refleja registros de mantenimiento con próxima fecha futura</div>
+        <div class="bug-tags">
+          <span class="tag">Mantenimiento</span>
+          <span class="tag">Lógica de negocio</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-medium">Medio</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        Al crear un registro de mantenimiento con campo "próximo" = <code>2026-10-01</code>, el contador en el header del módulo sigue mostrando <code>0 próximos</code>. Este contador debería reflejar cuántos vehículos tienen mantenimiento programado próximo (dentro de N días, o cualquier fecha futura).
+      </p>
+      <div class="two-col">
+        <div>
+          <div class="steps-label">Pasos para reproducir</div>
+          <ol class="steps-list">
+            <li>Ir a <code>/dashboard/maintenance</code></li>
+            <li>Crear mantenimiento con "Fecha próximo" = <code>2026-10-01</code></li>
+            <li>Observar el contador junto al título "Mantenimiento"</li>
+          </ol>
+        </div>
+        <div class="expected-actual">
+          <div class="ea-row ea-expected">
+            <div class="ea-label">Esperado</div>
+            <div class="ea-value"><code>1 próximo</code> (o similar, indicando que hay un mantenimiento futuro programado)</div>
+          </div>
+          <div class="ea-row ea-actual">
+            <div class="ea-label">Actual</div>
+            <div class="ea-value"><code>0 próximos</code> aun cuando hay un mantenimiento con fecha futura definida</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B-09 -->
+  <div class="bug-card" id="b09">
+    <div class="bug-header medium">
+      <div class="bug-id">B-09</div>
+      <div class="bug-main">
+        <div class="bug-title">Módulo Siniestros carece de campos Estado y Tipo</div>
+        <div class="bug-tags">
+          <span class="tag">Siniestros</span>
+          <span class="tag">Funcionalidad faltante</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-medium">Medio</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        El módulo de Siniestros no tiene campo "Estado" (Abierto / En trámite / Resuelto / Cerrado) ni campo "Tipo" (Colisión, Robo, Vandalismo, Daño por agentes externos, etc.). Sin estos campos, es imposible hacer seguimiento del estado de cada siniestro ni categorizar los incidentes para análisis estadístico.
+      </p>
+      <div class="expected-actual">
+        <div class="ea-row ea-expected">
+          <div class="ea-label">Esperado</div>
+          <div class="ea-value">Campos Estado (dropdown) y Tipo (dropdown) en el formulario de alta y en la tabla, con filtros por estado</div>
+        </div>
+        <div class="ea-row ea-actual">
+          <div class="ea-label">Actual</div>
+          <div class="ea-value">Formulario solo tiene Vehículo, Conductor, Fecha, Hora, Costo e Imagen. No hay Estado ni Tipo.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B-10 -->
+  <div class="bug-card" id="b10">
+    <div class="bug-header medium">
+      <div class="bug-id">B-10</div>
+      <div class="bug-main">
+        <div class="bug-title">Campo Hora en evaluación de Satisfacción no persiste al guardar</div>
+        <div class="bug-tags">
+          <span class="tag">Satisfacción</span>
+          <span class="tag">Formulario</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-medium">Medio</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        Al crear una evaluación manual de satisfacción con hora <code>14:30</code>, la tabla muestra <code>—</code> en la columna "Hora". El valor de hora ingresado no se guarda en la base de datos o no se envía en el request del formulario.
+      </p>
+      <div class="two-col">
+        <div>
+          <div class="steps-label">Pasos para reproducir</div>
+          <ol class="steps-list">
+            <li>Ir a <code>/dashboard/satisfaccion</code></li>
+            <li>Crear nueva evaluación con hora <code>14:30</code> y puntuación 8</li>
+            <li>Guardar y observar la columna "Hora" en la tabla</li>
+          </ol>
+        </div>
+        <div class="expected-actual">
+          <div class="ea-row ea-expected">
+            <div class="ea-label">Esperado</div>
+            <div class="ea-value"><code>14:30</code> en la columna Hora</div>
+          </div>
+          <div class="ea-row ea-actual">
+            <div class="ea-label">Actual</div>
+            <div class="ea-value"><code>—</code> (vacío, hora no guardada)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B-11 -->
+  <div class="bug-card" id="b11">
+    <div class="bug-header medium">
+      <div class="bug-id">B-11</div>
+      <div class="bug-main">
+        <div class="bug-title">"Mejor puntuado" y "Peor puntuado" muestran el mismo vehículo cuando solo hay uno</div>
+        <div class="bug-tags">
+          <span class="tag">Satisfacción</span>
+          <span class="tag">Lógica de KPIs</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-medium">Medio</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        Con un solo vehículo y una evaluación, el panel de KPIs muestra tanto "Mejor puntuado: AAA 1234 (8.0)" como "Peor puntuado: AAA 1234 (8.0)". Esto es semánticamente incorrecto y confunde al usuario. Si hay un solo vehículo, "Peor puntuado" no tiene sentido y debería ocultarse o mostrar <code>—</code>.
+      </p>
+      <div class="expected-actual">
+        <div class="ea-row ea-expected">
+          <div class="ea-label">Esperado</div>
+          <div class="ea-value">"Peor puntuado: —" cuando solo existe un vehículo con evaluaciones</div>
+        </div>
+        <div class="ea-row ea-actual">
+          <div class="ea-label">Actual</div>
+          <div class="ea-value">Ambos KPIs muestran el mismo vehículo con la misma puntuación: "AAA 1234 · 8.0"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B-12 -->
+  <div class="bug-card" id="b12">
+    <div class="bug-header medium">
+      <div class="bug-id">B-12</div>
+      <div class="bug-main">
+        <div class="bug-title">"1 repostajes combustible" — plural incorrecto en módulo Análisis</div>
+        <div class="bug-tags">
+          <span class="tag">Análisis</span>
+          <span class="tag">Copywriting</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-medium">Medio</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        El KPI de rendimiento en la pantalla de Análisis muestra <code>1 repostajes combustible</code>. Cuando el valor es 1, debería decir <code>1 repostaje</code> (singular). El sistema no maneja correctamente la pluralización de esta cadena.
+      </p>
+      <div class="expected-actual">
+        <div class="ea-row ea-expected">
+          <div class="ea-label">Esperado</div>
+          <div class="ea-value"><code>1 repostaje de combustible</code></div>
+        </div>
+        <div class="ea-row ea-actual">
+          <div class="ea-label">Actual</div>
+          <div class="ea-value"><code>1 repostajes combustible</code></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B-13 -->
+  <div class="bug-card" id="b13">
+    <div class="bug-header medium">
+      <div class="bug-id">B-13</div>
+      <div class="bug-main">
+        <div class="bug-title">"evaluaciónes" — tilde ortográfica incorrecta en Satisfacción</div>
+        <div class="bug-tags">
+          <span class="tag">Satisfacción</span>
+          <span class="tag">Ortografía</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-medium">Medio</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        El módulo de Satisfacción muestra el texto <code>0 evaluaciónes registradas</code> y <code>0 evaluaciónes en total</code> con tilde incorrecta en la palabra "evaluaciones" (no lleva tilde en la sílaba "io"). Esta es una falta de ortografía visible en el UI con clasificación media por afectar la credibilidad profesional del producto.
+      </p>
+      <div class="expected-actual">
+        <div class="ea-row ea-expected">
+          <div class="ea-label">Esperado</div>
+          <div class="ea-value"><code>0 evaluaciones registradas</code></div>
+        </div>
+        <div class="ea-row ea-actual">
+          <div class="ea-label">Actual</div>
+          <div class="ea-value"><code>0 evaluaciónes registradas</code> (tilde incorrecta)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       BAJOS
+  ══════════════════════════════════════════ -->
+  <div class="section-title" style="color:var(--low)">🔵 BAJO</div>
+
+  <!-- B-14 -->
+  <div class="bug-card" id="b14">
+    <div class="bug-header low">
+      <div class="bug-id">B-14</div>
+      <div class="bug-main">
+        <div class="bug-title">"1vehículos" / "2conductores" — falta espacio entre número y unidad</div>
+        <div class="bug-tags">
+          <span class="tag">Dashboard</span>
+          <span class="tag">Formato</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-low">Bajo</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        Las KPI cards del Dashboard muestran <code>1vehículos</code> y <code>2conductores</code> sin espacio entre el número y la unidad. Impacto visual bajo pero demuestra un error en la concatenación de strings.
+      </p>
+      <div class="expected-actual">
+        <div class="ea-row ea-expected">
+          <div class="ea-label">Esperado</div>
+          <div class="ea-value"><code>1 vehículo</code> (singular) · <code>2 conductores</code></div>
+        </div>
+        <div class="ea-row ea-actual">
+          <div class="ea-label">Actual</div>
+          <div class="ea-value"><code>1vehículos</code> · <code>2conductores</code></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B-15 -->
+  <div class="bug-card" id="b15">
+    <div class="bug-header low">
+      <div class="bug-id">B-15</div>
+      <div class="bug-main">
+        <div class="bug-title">Rol de usuario inconsistente: header muestra "Superroot", sidebar muestra "admin"</div>
+        <div class="bug-tags">
+          <span class="tag">Todos los módulos</span>
+          <span class="tag">Auth / Datos de usuario</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-low">Bajo</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        El header superior derecho muestra el rol del usuario como <code>Superroot</code> (probablemente "Superuser" mal escrito), mientras que el sidebar inferior muestra <code>admin</code>. Estas dos fuentes de datos de usuario son inconsistentes entre sí.
+      </p>
+      <div class="expected-actual">
+        <div class="ea-row ea-expected">
+          <div class="ea-label">Esperado</div>
+          <div class="ea-value">El mismo rol en ambos lugares. Ej: <code>Administrador</code></div>
+        </div>
+        <div class="ea-row ea-actual">
+          <div class="ea-label">Actual</div>
+          <div class="ea-value">Header: <code>Superroot</code> · Sidebar: <code>admin</code></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B-16 -->
+  <div class="bug-card" id="b16">
+    <div class="bug-header low">
+      <div class="bug-id">B-16</div>
+      <div class="bug-main">
+        <div class="bug-title">Tabla de Conductores no muestra columna "Vehículo asignado"</div>
+        <div class="bug-tags">
+          <span class="tag">Conductores</span>
+          <span class="tag">UX</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-low">Bajo</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        La tabla principal de Conductores no incluye ninguna columna que indique si el conductor tiene un vehículo asignado actualmente. Esto obliga al usuario a abrir cada perfil individualmente para ver esa información, impactando la eficiencia operativa.
+      </p>
+      <div class="expected-actual">
+        <div class="ea-row ea-expected">
+          <div class="ea-label">Esperado</div>
+          <div class="ea-value">Columna "Vehículo asignado" con la patente del vehículo o "—" si no tiene asignación</div>
+        </div>
+        <div class="ea-row ea-actual">
+          <div class="ea-label">Actual</div>
+          <div class="ea-value">No existe tal columna en la tabla de conductores</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B-17 -->
+  <div class="bug-card" id="b17">
+    <div class="bug-header low">
+      <div class="bug-id">B-17</div>
+      <div class="bug-main">
+        <div class="bug-title">Nombre y subtítulo de vehículo duplicados en tabla "Puntuación por vehículo"</div>
+        <div class="bug-tags">
+          <span class="tag">Satisfacción</span>
+          <span class="tag">UI</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-low">Bajo</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        En la sección "Puntuación por vehículo" del módulo Satisfacción, cada fila muestra la patente del vehículo dos veces apiladas (una coma otra), donde se esperaría tener nombre/patente como título y algo diferente como subtítulo (ej: marca y modelo).
+      </p>
+      <div class="expected-actual">
+        <div class="ea-row ea-expected">
+          <div class="ea-label">Esperado</div>
+          <div class="ea-value">Título: <code>AAA 1234</code> · Subtítulo: <code>Toyota Hilux</code></div>
+        </div>
+        <div class="ea-row ea-actual">
+          <div class="ea-label">Actual</div>
+          <div class="ea-value">Título: <code>AAA 1234</code> · Subtítulo: <code>AAA 1234</code> (duplicado)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B-18 -->
+  <div class="bug-card" id="b18">
+    <div class="bug-header low">
+      <div class="bug-id">B-18</div>
+      <div class="bug-main">
+        <div class="bug-title">Página de encuesta pública tiene título de página duplicado</div>
+        <div class="bug-tags">
+          <span class="tag">Survey pública</span>
+          <span class="tag">SEO / Metadatos</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-low">Bajo</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        La URL pública de encuesta (<code>/survey/[uuid]</code>) tiene como título de pestaña <code>Encuesta de Satisfacción | Cuantive | Cuantive</code> — "Cuantive" aparece duplicado. Esto se produce probablemente por concatenar el <code>title</code> del layout con el del template de Next.js.
+      </p>
+      <div class="expected-actual">
+        <div class="ea-row ea-expected">
+          <div class="ea-label">Esperado</div>
+          <div class="ea-value"><code>Encuesta de Satisfacción | Cuantive</code></div>
+        </div>
+        <div class="ea-row ea-actual">
+          <div class="ea-label">Actual</div>
+          <div class="ea-value"><code>Encuesta de Satisfacción | Cuantive | Cuantive</code></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B-19 -->
+  <div class="bug-card" id="b19">
+    <div class="bug-header low">
+      <div class="bug-id">B-19</div>
+      <div class="bug-main">
+        <div class="bug-title">Valores de KM y km/L carecen de espacio entre número y unidad</div>
+        <div class="bug-tags">
+          <span class="tag">Dashboard</span>
+          <span class="tag">Análisis</span>
+          <span class="tag">Formato</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-low">Bajo</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        Los KPIs del Dashboard y Análisis muestran valores como <code>500km</code> y <code>8,33km/L</code> sin espacio entre el número y la unidad. El estándar tipográfico en español (y la norma SI) requiere al menos un espacio fino entre número y unidad.
+      </p>
+      <div class="expected-actual">
+        <div class="ea-row ea-expected">
+          <div class="ea-label">Esperado</div>
+          <div class="ea-value"><code>500 km</code> · <code>8,33 km/L</code></div>
+        </div>
+        <div class="ea-row ea-actual">
+          <div class="ea-label">Actual</div>
+          <div class="ea-value"><code>500km</code> · <code>8,33km/L</code></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B-20 -->
+  <div class="bug-card" id="b20">
+    <div class="bug-header low">
+      <div class="bug-id">B-20</div>
+      <div class="bug-main">
+        <div class="bug-title">Conductor con licencia vencida muestra badge "Activo" sin advertencia</div>
+        <div class="bug-tags">
+          <span class="tag">Conductores</span>
+          <span class="tag">Estado de cuenta</span>
+        </div>
+      </div>
+      <span class="severity-badge badge-low">Bajo</span>
+    </div>
+    <div class="bug-body">
+      <p class="bug-description">
+        En la tabla de Conductores, María López tiene licencia vencida pero su badge de estado aparece como <code>Activo</code> (verde) sin ningún indicador de alerta o advertencia. El sistema debería diferenciar entre estado de cuenta "Activo" y validez de la licencia, o al menos mostrar un badge secundario de "Licencia vencida".
+      </p>
+      <div class="expected-actual">
+        <div class="ea-row ea-expected">
+          <div class="ea-label">Esperado</div>
+          <div class="ea-value">Badge <code>Activo</code> acompañado de un badge ámbar <code>⚠ Licencia vencida</code> o estado combinado</div>
+        </div>
+        <div class="ea-row ea-actual">
+          <div class="ea-label">Actual</div>
+          <div class="ea-value">Badge verde <code>Activo</code> sin ningún indicador de licencia vencida</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<div class="report-footer">
+  Reporte generado por GitHub Copilot QA Agent · Cuantive Fleet Management QA · abril 2026
+  <br>
+  <span style="color:#94a3b8">Testing realizado con Playwright sobre Next.js 14.2.3 + Express + PostgreSQL en entorno local</span>
+</div>
+
+</body>
+</html>

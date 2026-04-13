@@ -109,7 +109,8 @@ export class FuelLoadService {
     const kmTraveled = currentOdometer - prevOdometer;
     if (kmTraveled <= 0) return null;
 
-    // km/L = kilometros recorridos desde última referencia / litros cargados ahora
+    // km/unidad = km recorridos desde última referencia / unidad cargada ahora
+    // Aplica tanto para combustible (km/L) como eléctrico (km/kWh)
     return kmTraveled / currentLiters;
   }
 
@@ -188,7 +189,10 @@ export class FuelLoadService {
         date: { gte: from },
         ...(vehicleId ? { vehicleId } : {}),
       },
-      include: { vehicle: { select: { id: true, plate: true, name: true } } },
+      include: {
+        vehicle:  { select: { id: true, plate: true, name: true } },
+        fuelType: { select: { unit: true } },
+      },
     });
 
     const byVehicle: Record<string, { vehicleId: string; plate: string; totalLiters: number; totalCost: number; loads: number }> = {};
@@ -206,19 +210,40 @@ export class FuelLoadService {
     const totalCost   = loads.reduce((s, l) => s + Number(l.priceTotal ?? 0), 0);
     const totalLiters = loads.reduce((s, l) => s + Number(l.litersOrKwh), 0);
 
-    // avg km per liter: from loads that have kmPerUnit
-    const loadsWithKm = loads.filter((l) => l.kmPerUnit);
-    const avgKmPerLiter = loadsWithKm.length
-      ? loadsWithKm.reduce((s, l) => s + Number(l.kmPerUnit), 0) / loadsWithKm.length
+    // Separate fuel (litros) vs electric (kwh)
+    const fuelLoads = loads.filter((l) => l.fuelType?.unit !== 'kwh');
+    const elecLoads = loads.filter((l) => l.fuelType?.unit === 'kwh');
+
+    const totalLitersFuel = fuelLoads.reduce((s, l) => s + Number(l.litersOrKwh), 0);
+    const totalKwhElec    = elecLoads.reduce((s, l) => s + Number(l.litersOrKwh), 0);
+
+    const fuelLoadsWithKm = fuelLoads.filter((l) => l.kmPerUnit);
+    const elecLoadsWithKm = elecLoads.filter((l) => l.kmPerUnit);
+    const allLoadsWithKm  = loads.filter((l) => l.kmPerUnit);
+
+    const avgKmPerLiter = allLoadsWithKm.length
+      ? allLoadsWithKm.reduce((s, l) => s + Number(l.kmPerUnit), 0) / allLoadsWithKm.length
+      : 0;
+
+    const avgKmPerLiterFuel = fuelLoadsWithKm.length
+      ? fuelLoadsWithKm.reduce((s, l) => s + Number(l.kmPerUnit), 0) / fuelLoadsWithKm.length
+      : 0;
+
+    const avgKmPerKwhElec = elecLoadsWithKm.length
+      ? elecLoadsWithKm.reduce((s, l) => s + Number(l.kmPerUnit), 0) / elecLoadsWithKm.length
       : 0;
 
     return {
       totalCost,
       totalLiters,
-      loadsCount:   loads.length,
+      totalLitersFuel,
+      totalKwhElec,
+      loadsCount:       loads.length,
       avgKmPerLiter,
-      costByVehicle: Object.values(byVehicle),
-      monthlyTrend:  [],
+      avgKmPerLiterFuel,
+      avgKmPerKwhElec,
+      costByVehicle:    Object.values(byVehicle),
+      monthlyTrend:     [],
     };
   }
 

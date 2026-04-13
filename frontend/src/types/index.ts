@@ -1,11 +1,12 @@
 // ─── Auth ─────────────────────────────────────────────────────────────────────
 export interface AuthUser {
-  id:          string;
-  name:        string;
-  email:       string;
-  role:        'superroot' | 'admin';
-  companyId:   string | null;
-  companyName: string | null;
+  id:                 string;
+  name:               string;
+  email:              string;
+  role:               'superroot' | 'admin';
+  companyId:          string | null;
+  companyName:        string | null;
+  canDownloadMetrics: boolean;
 }
 
 export interface LoginResponse {
@@ -34,6 +35,7 @@ export interface VehicleType {
 export interface Vehicle {
   id:                  string;
   plate:               string;
+  name?:               string;
   brand:               string;
   model:               string;
   year:                number;
@@ -64,6 +66,8 @@ export interface Driver {
   createdAt:        string;
   // días hasta vencimiento de licencia (calculado en UI)
   daysToExpiry?:    number;
+  // vehículos asignados via VehicleDriver join table
+  vehicles?:        Array<{ vehicle: { id: string; plate: string; name?: string } }>;
 }
 
 // ─── FuelType ─────────────────────────────────────────────────────────────────
@@ -94,12 +98,16 @@ export interface FuelLoad {
 }
 
 export interface FuelStats {
-  totalCost:        number;
-  totalLiters:      number;
-  avgKmPerLiter:    number;
-  loadsCount:       number;
-  costByVehicle:    { vehicleId: string; plate: string; totalCost: number; totalLiters: number }[];
-  monthlyTrend:     { month: string; totalCost: number; totalLiters: number }[];
+  totalCost:           number;
+  totalLiters:         number;
+  totalLitersFuel:     number;   // litros consumed (nafta/gasoil)
+  totalKwhElec:        number;   // kWh consumed (electric)
+  avgKmPerLiter:       number;   // combined average (legacy)
+  avgKmPerLiterFuel:   number;   // km/L for fuel loads only
+  avgKmPerKwhElec:     number;   // km/kWh for electric loads only
+  loadsCount:          number;
+  costByVehicle:       { vehicleId: string; plate: string; totalCost: number; totalLiters: number }[];
+  monthlyTrend:        { month: string; totalCost: number; totalLiters: number }[];
 }
 
 // ─── Maintenance ──────────────────────────────────────────────────────────────
@@ -246,13 +254,14 @@ export interface AdminCompany {
 }
 
 export interface AdminWithCompany {
-  id:        string;
-  name:      string;
-  email:     string;
-  active:    boolean;
-  lastLogin: string | null;
-  createdAt: string;
-  company:   AdminCompany | null;
+  id:                 string;
+  name:               string;
+  email:              string;
+  active:             boolean;
+  lastLogin:          string | null;
+  createdAt:          string;
+  canDownloadMetrics: boolean;
+  company:            AdminCompany | null;
 }
 
 export interface SuperadminDashboard {
@@ -272,15 +281,16 @@ export interface AdminListResponse {
 }
 
 export interface CreateAdminPayload {
-  adminName:      string;
-  adminEmail:     string;
-  adminPassword:  string;
-  companyName:    string;
-  companyRut?:    string;
-  companyCity?:   string;
-  companyPhone?:  string;
-  companyEmail?:  string;
-  companyAddress?: string;
+  adminName:          string;
+  adminEmail:         string;
+  adminPassword:      string;
+  companyName:        string;
+  companyRut?:        string;
+  companyCity?:       string;
+  companyPhone?:      string;
+  companyEmail?:      string;
+  companyAddress?:    string;
+  canDownloadMetrics?: boolean;
 }
 
 export type UpdateAdminPayload = Partial<CreateAdminPayload>;
@@ -322,4 +332,69 @@ export interface TableColumn<T> {
   render?:   (row: T) => React.ReactNode;
   sortable?: boolean;
   width?:    string;
+}
+
+// ─── Siniestro / Daño ────────────────────────────────────────────────────────
+export interface Siniestro {
+  id:            string;
+  vehicleId?:    string;
+  driverId?:     string;
+  fecha?:        string;  // ISO date
+  hora?:         string;  // ISO datetime (base 2000-01-01, only time matters)
+  observaciones?: string;
+  costo?:        number;
+  estado:        'PENDIENTE' | 'EN_PROCESO' | 'CERRADO' | 'RECHAZADO';
+  tipo?:         'CHOQUE' | 'RASPADURA' | 'ROBO' | 'VANDALISMO' | 'INCENDIO' | 'OTRO';
+  imageFile?:    string;  // file UUID
+  createdAt:     string;
+  vehicle?:      { id: string; plate: string; name?: string };
+  driver?:       { id: string; name: string; lastname: string };
+  image?:        { id: string; originalName: string; storagePath: string };
+}
+
+export interface SiniestroStats {
+  totalCost:  number;
+  totalCount: number;
+  byVehicle:  { vehicleId: string; plate: string; count: number; total: number }[];
+  byDriver:   { driverId: string; name: string;   count: number; total: number }[];
+}
+
+export interface DriverSiniestroRankingRow {
+  position:   number;
+  driverId:   string;
+  driver:     string;
+  totalCost:  number;
+  totalCount: number;
+}
+
+// ─── SATISFACCIÓN ─────────────────────────────────────────────────────────────
+
+export interface Satisfaccion {
+  id:            string;
+  vehicleId?:    string;
+  fecha?:        string;
+  hora?:         string;
+  puntuacion?:   number;
+  observaciones?: string;
+  imageFile?:    string;
+  source:        'manual' | 'qr';
+  createdAt:     string;
+  vehicle?: { id: string; plate: string; name?: string };
+  image?:   { id: string; originalName: string; storagePath: string };
+}
+
+export interface VehicleSatisfaccionStats {
+  vehicleId: string;
+  plate:     string;
+  name:      string;
+  avgScore:  number;
+  count:     number;
+}
+
+export interface SatisfaccionStats {
+  overallAvg:   number | null;
+  totalReviews: number;
+  bestVehicle:  VehicleSatisfaccionStats | null;
+  worstVehicle: VehicleSatisfaccionStats | null;
+  byVehicle:    VehicleSatisfaccionStats[];
 }

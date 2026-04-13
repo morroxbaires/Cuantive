@@ -67,6 +67,8 @@ model Company {
   refreshTokens        RefreshToken[]
   vehicleDocuments     VehicleDocument[]
   turnos               Turno[]
+  siniestros           Siniestro[]
+  satisfacciones       Satisfaccion[]
 
   @@index([active])
   @@map("companies")
@@ -85,7 +87,8 @@ model User {
   lastLogin    DateTime? @map("last_login")
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
-  deletedAt    DateTime? @map("deleted_at")
+  deletedAt           DateTime? @map("deleted_at")
+  canDownloadMetrics  Boolean   @default(false) @map("can_download_metrics")
 
   company       Company?       @relation(fields: [companyId], references: [id])
   refreshTokens RefreshToken[]
@@ -115,6 +118,8 @@ model File {
 
   fuelLoadReceipt    FuelLoad[]    @relation("FuelLoadReceipt")
   maintenanceReceipt Maintenance[] @relation("MaintenanceReceipt")
+  siniestroImage     Siniestro[]   @relation("SiniestroImage")
+  satisfaccionImage  Satisfaccion[] @relation("SatisfaccionImage")
 
   @@index([companyId])
   @@map("files")
@@ -152,6 +157,8 @@ model Vehicle {
   vehicleDocuments VehicleDocument[]
   drivers          VehicleDriver[]
   turnos           Turno[]
+  siniestros       Siniestro[]
+  satisfacciones   Satisfaccion[]
 
   @@unique([companyId, plate])
   @@index([companyId, active])
@@ -182,6 +189,7 @@ model Driver {
   alertNotifs  AlertNotification[]
   vehicles     VehicleDriver[]
   turnos       Turno[]
+  siniestros   Siniestro[]
 
   @@unique([companyId, document])
   @@index([companyId, active])
@@ -441,6 +449,34 @@ model VehicleDocument {
   @@map("vehicle_documents")
 }
 
+// ─── SINIESTROS / DAÑOS ──────────────────────────────────────────────────
+
+model Siniestro {
+  id             String    @id @db.Char(36)
+  companyId      String    @map("company_id") @db.Char(36)
+  vehicleId      String?   @map("vehicle_id") @db.Char(36)
+  driverId       String?   @map("driver_id") @db.Char(36)
+  fecha          DateTime? @db.Date
+  hora           DateTime? @db.Time(0)
+  observaciones  String?   @db.Text
+  costo          Decimal?  @db.Decimal(12, 2)
+  estado         String    @default("PENDIENTE") @db.VarChar(20)
+  tipo           String?   @db.VarChar(20)
+  imageFile      String?   @map("image_file") @db.Char(36)
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  company  Company  @relation(fields: [companyId], references: [id])
+  vehicle  Vehicle? @relation(fields: [vehicleId], references: [id])
+  driver   Driver?  @relation(fields: [driverId], references: [id])
+  image    File?    @relation("SiniestroImage", fields: [imageFile], references: [id])
+
+  @@index([companyId, fecha])
+  @@index([vehicleId])
+  @@index([driverId])
+  @@map("siniestros")
+}
+
 // ─── TURNOS ───────────────────────────────────────────────────────────────
 
 model Turno {
@@ -467,4 +503,28 @@ model Turno {
   @@index([vehicleId])
   @@index([driverId])
   @@map("turnos")
+}
+
+// ─── SATISFACCIÓN ─────────────────────────────────────────────────────────
+
+model Satisfaccion {
+  id            String    @id @db.Char(36)
+  companyId     String    @map("company_id") @db.Char(36)
+  vehicleId     String?   @map("vehicle_id") @db.Char(36)
+  fecha         DateTime? @db.Date
+  hora          DateTime? @db.Time(0)
+  puntuacion    Int?      @db.UnsignedTinyInt
+  observaciones String?   @db.Text
+  imageFile     String?   @map("image_file") @db.Char(36)
+  source        String    @default("manual") @db.VarChar(10)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  company Company  @relation(fields: [companyId], references: [id])
+  vehicle Vehicle? @relation(fields: [vehicleId], references: [id])
+  image   File?    @relation("SatisfaccionImage", fields: [imageFile], references: [id])
+
+  @@index([companyId, fecha])
+  @@index([vehicleId])
+  @@map("satisfacciones")
 }

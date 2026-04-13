@@ -27,6 +27,9 @@ import reportsRoutes          from './modules/reports/reports.routes';
 import vehicleDocumentRoutes  from './modules/vehicle-documents/vehicle-documents.routes';
 import superadminRoutes        from './modules/superadmin/superadmin.routes';
 import turnoRoutes             from './modules/turnos/turno.routes';
+import siniestroRoutes         from './modules/siniestros/siniestro.routes';
+import satisfaccionRoutes      from './modules/satisfaccion/satisfaccion.routes';
+import publicRoutes            from './modules/public/public.routes';
 
 import { scheduleDocumentExpiryJob } from './jobs/document-expiry.job';
 
@@ -89,6 +92,9 @@ app.use('/api/analytics',          analyticsRoutes);
 app.use('/api/vehicle-documents',  vehicleDocumentRoutes);
 app.use('/api/superadmin',         superadminRoutes);
 app.use('/api/turnos',             turnoRoutes);
+app.use('/api/siniestros',         siniestroRoutes);
+app.use('/api/satisfaccion',       satisfaccionRoutes);
+app.use('/api/public',             publicRoutes);
 
 // Health check
 app.get('/health', (_req, res) => {

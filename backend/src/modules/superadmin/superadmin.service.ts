@@ -6,27 +6,29 @@ import { ApiError } from '../../utils/api-error';
 
 // ─── Schemas ─────────────────────────────────────────────────────────────────
 export const createAdminSchema = z.object({
-  adminName:       z.string().min(2,  'Nombre requerido'),
-  adminEmail:      z.string().email('Email inválido'),
-  adminPassword:   z.string().min(8,  'Mínimo 8 caracteres'),
-  companyName:     z.string().min(2,  'Nombre de empresa requerido'),
-  companyRut:      z.string().optional(),
-  companyCity:     z.string().optional(),
-  companyPhone:    z.string().optional(),
-  companyEmail:    z.string().email('Email de empresa inválido').optional().or(z.literal('')),
-  companyAddress:  z.string().optional(),
+  adminName:          z.string().min(2,  'Nombre requerido'),
+  adminEmail:         z.string().email('Email inválido'),
+  adminPassword:      z.string().min(8,  'Mínimo 8 caracteres'),
+  companyName:        z.string().min(2,  'Nombre de empresa requerido'),
+  companyRut:         z.string().optional(),
+  companyCity:        z.string().optional(),
+  companyPhone:       z.string().optional(),
+  companyEmail:       z.string().email('Email de empresa inválido').optional().or(z.literal('')),
+  companyAddress:     z.string().optional(),
+  canDownloadMetrics: z.boolean().optional().default(false),
 });
 
 export const updateAdminSchema = z.object({
-  adminName:      z.string().min(2).optional(),
-  adminEmail:     z.string().email().optional(),
-  adminPassword:  z.string().min(8).optional(),
-  companyName:    z.string().min(2).optional(),
-  companyRut:     z.string().optional(),
-  companyCity:    z.string().optional(),
-  companyPhone:   z.string().optional(),
-  companyEmail:   z.string().email().optional().or(z.literal('')),
-  companyAddress: z.string().optional(),
+  adminName:          z.string().min(2).optional(),
+  adminEmail:         z.string().email().optional(),
+  adminPassword:      z.string().min(8).optional(),
+  companyName:        z.string().min(2).optional(),
+  companyRut:         z.string().optional(),
+  companyCity:        z.string().optional(),
+  companyPhone:       z.string().optional(),
+  companyEmail:       z.string().email().optional().or(z.literal('')),
+  companyAddress:     z.string().optional(),
+  canDownloadMetrics: z.boolean().optional(),
 });
 
 export type CreateAdminDto = z.infer<typeof createAdminSchema>;
@@ -34,12 +36,13 @@ export type UpdateAdminDto = z.infer<typeof updateAdminSchema>;
 
 // ─── Admin select fragment ────────────────────────────────────────────────────
 const adminSelect = {
-  id:        true,
-  name:      true,
-  email:     true,
-  active:    true,
-  lastLogin: true,
-  createdAt: true,
+  id:                 true,
+  name:               true,
+  email:              true,
+  active:             true,
+  lastLogin:          true,
+  createdAt:          true,
+  canDownloadMetrics: true,
   company: {
     select: {
       id:       true,
@@ -133,7 +136,14 @@ export class SuperadminService {
     const exists = await prisma.user.findFirst({ where: { email: dto.adminEmail, deletedAt: null } });
     if (exists) throw new ApiError(409, 'Ya existe un usuario con ese email');
 
-    const companyEmail = dto.companyEmail?.trim() === '' ? undefined : dto.companyEmail;
+    // Verificar RUT duplicado
+    const companyRut = dto.companyRut?.trim() || null;
+    if (companyRut) {
+      const rutExists = await prisma.company.findUnique({ where: { rut: companyRut } });
+      if (rutExists) throw new ApiError(409, 'Ya existe una empresa con ese RUT');
+    }
+
+    const companyEmail = dto.companyEmail?.trim() || null;
 
     const hash = await bcrypt.hash(dto.adminPassword, 12);
 
@@ -147,11 +157,11 @@ export class SuperadminService {
           id:       companyId,
           name:     dto.companyName,
           tradeName: dto.companyName,
-          rut:      dto.companyRut     ?? '',
-          city:     dto.companyCity    ?? '',
-          phone:    dto.companyPhone   ?? '',
-          email:    companyEmail       ?? '',
-          address:  dto.companyAddress ?? '',
+          rut:      companyRut,
+          city:     dto.companyCity?.trim()    || null,
+          phone:    dto.companyPhone?.trim()   || null,
+          email:    companyEmail,
+          address:  dto.companyAddress?.trim() || null,
           active:   true,
           settings: {
             create: {
@@ -163,13 +173,14 @@ export class SuperadminService {
 
       const user = await tx.user.create({
         data: {
-          id:           userId,
-          companyId:    company.id,
-          name:         dto.adminName,
-          email:        dto.adminEmail,
-          passwordHash: hash,
-          role:         'admin',
-          active:       true,
+          id:                 userId,
+          companyId:          company.id,
+          name:               dto.adminName,
+          email:              dto.adminEmail,
+          passwordHash:       hash,
+          role:               'admin',
+          active:             true,
+          canDownloadMetrics: dto.canDownloadMetrics ?? false,
         },
         select: adminSelect,
       });
@@ -190,9 +201,10 @@ export class SuperadminService {
 
     return prisma.$transaction(async (tx) => {
       const userUpdate: Record<string, unknown> = {};
-      if (dto.adminName)     userUpdate.name  = dto.adminName;
-      if (dto.adminEmail)    userUpdate.email = dto.adminEmail;
-      if (dto.adminPassword) userUpdate.passwordHash = await bcrypt.hash(dto.adminPassword, 12);
+      if (dto.adminName)                       userUpdate.name               = dto.adminName;
+      if (dto.adminEmail)                      userUpdate.email              = dto.adminEmail;
+      if (dto.adminPassword)                   userUpdate.passwordHash       = await bcrypt.hash(dto.adminPassword, 12);
+      if (dto.canDownloadMetrics !== undefined) userUpdate.canDownloadMetrics = dto.canDownloadMetrics;
 
       if (Object.keys(userUpdate).length > 0) {
         await tx.user.update({ where: { id }, data: userUpdate });

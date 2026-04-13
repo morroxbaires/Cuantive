@@ -91,7 +91,7 @@ export default function MaintenancePage() {
           <div className="flex items-start gap-3">
             <Calendar className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600" />
             <div>
-              <p className="text-sm font-medium text-amber-800">{upcoming.length} mantenimiento{upcoming.length !== 1 ? 's' : ''} próximo{upcoming.length !== 1 ? 's' : ''} (60 días)</p>
+              <p className="text-sm font-medium text-amber-800">{upcoming.length} mantenimiento{upcoming.length !== 1 ? 's' : ''} próximo{upcoming.length !== 1 ? 's' : ''} programado{upcoming.length !== 1 ? 's' : ''}</p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {upcoming.slice(0, 4).map((m) => (
                   <span key={m.id} className="rounded-full bg-white px-2.5 py-0.5 text-xs font-medium text-amber-700 border border-amber-200">

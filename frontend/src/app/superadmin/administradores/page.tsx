@@ -10,20 +10,23 @@ import { Input }     from '@/components/ui/Input';
 import { Badge }     from '@/components/ui/Badge';
 import { Modal }     from '@/components/ui/Modal';
 import { PageLoader } from '@/components/ui/Spinner';
+import { useToast }  from '@/components/ui/Toast';
+import { parseError } from '@/lib/handle-error';
 import { superadminService } from '@/services/superadmin.service';
 import { AdminWithCompany, CreateAdminPayload, UpdateAdminPayload } from '@/types';
 
 // ─── Schema ──────────────────────────────────────────────────────────────────
 const createSchema = z.object({
-  adminName:      z.string().min(2,  'Nombre requerido'),
-  adminEmail:     z.string().email('Email inválido'),
-  adminPassword:  z.string().min(8,  'Mínimo 8 caracteres'),
-  companyName:    z.string().min(2,  'Nombre de empresa requerido'),
-  companyRut:     z.string().optional(),
-  companyCity:    z.string().optional(),
-  companyPhone:   z.string().optional(),
-  companyEmail:   z.union([z.string().email('Email inválido'), z.literal('')]).optional(),
-  companyAddress: z.string().optional(),
+  adminName:          z.string().min(2,  'Nombre requerido'),
+  adminEmail:         z.string().email('Email inválido'),
+  adminPassword:      z.string().min(8,  'Mínimo 8 caracteres'),
+  companyName:        z.string().min(2,  'Nombre de empresa requerido'),
+  companyRut:         z.string().optional(),
+  companyCity:        z.string().optional(),
+  companyPhone:       z.string().optional(),
+  companyEmail:       z.union([z.string().email('Email inválido'), z.literal('')]).optional(),
+  companyAddress:     z.string().optional(),
+  canDownloadMetrics: z.boolean().default(false),
 });
 
 const editSchema = createSchema.extend({
@@ -57,22 +60,23 @@ interface AdminFormProps {
 
 function AdminFormModal({ open, onClose, onSaved, editing }: AdminFormProps) {
   const isEdit = !!editing;
-  const [serverError, setServerError] = useState<string | null>(null);
+  const { success, error } = useToast();
 
   const schema = isEdit ? editSchema : createSchema;
 
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<CreateForm | EditForm>({
     resolver: zodResolver(schema),
     defaultValues: {
-      adminName:      '',
-      adminEmail:     '',
-      adminPassword:  '',
-      companyName:    '',
-      companyRut:     '',
-      companyCity:    '',
-      companyPhone:   '',
-      companyEmail:   '',
-      companyAddress: '',
+      adminName:          '',
+      adminEmail:         '',
+      adminPassword:      '',
+      companyName:        '',
+      companyRut:         '',
+      companyCity:        '',
+      companyPhone:       '',
+      companyEmail:       '',
+      companyAddress:     '',
+      canDownloadMetrics: false,
     },
   });
 
@@ -80,42 +84,43 @@ function AdminFormModal({ open, onClose, onSaved, editing }: AdminFormProps) {
   useEffect(() => {
     if (open && editing) {
       reset({
-        adminName:      editing.name,
-        adminEmail:     editing.email,
-        adminPassword:  '',
-        companyName:    editing.company?.name    ?? '',
-        companyRut:     editing.company?.rut      ?? '',
-        companyCity:    editing.company?.city     ?? '',
-        companyPhone:   editing.company?.phone    ?? '',
-        companyEmail:   editing.company?.email    ?? '',
-        companyAddress: editing.company?.address  ?? '',
+        adminName:          editing.name,
+        adminEmail:         editing.email,
+        adminPassword:      '',
+        companyName:        editing.company?.name    ?? '',
+        companyRut:         editing.company?.rut      ?? '',
+        companyCity:        editing.company?.city     ?? '',
+        companyPhone:       editing.company?.phone    ?? '',
+        companyEmail:       editing.company?.email    ?? '',
+        companyAddress:     editing.company?.address  ?? '',
+        canDownloadMetrics: editing.canDownloadMetrics ?? false,
       });
     } else if (open) {
       reset({
         adminName: '', adminEmail: '', adminPassword: '',
         companyName: '', companyRut: '', companyCity: '',
         companyPhone: '', companyEmail: '', companyAddress: '',
+        canDownloadMetrics: false,
       });
     }
-    setServerError(null);
   }, [open, editing, reset]);
 
   const onSubmit = async (values: CreateForm | EditForm) => {
-    setServerError(null);
     try {
       if (isEdit && editing) {
         const payload: UpdateAdminPayload = { ...values };
         if (!payload.adminPassword) delete payload.adminPassword;
         await superadminService.updateAdmin(editing.id, payload);
+        success('Administrador actualizado', `Los datos de ${values.adminName} fueron guardados.`);
       } else {
         await superadminService.createAdmin(values as CreateAdminPayload);
+        success('Administrador creado', `Se creó la cuenta de ${values.adminName} correctamente.`);
       }
       onSaved();
       onClose();
     } catch (err: unknown) {
-      const msg = (err as { response?: { data?: { message?: string } }; message?: string })
-        ?.response?.data?.message ?? (err as Error)?.message ?? 'Error al guardar';
-      setServerError(msg);
+      const { title, detail } = parseError(err);
+      error(title, detail);
     }
   };
 
@@ -140,12 +145,6 @@ function AdminFormModal({ open, onClose, onSaved, editing }: AdminFormProps) {
       }
     >
       <div className="space-y-5">
-        {serverError && (
-          <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
-            {serverError}
-          </div>
-        )}
-
         {/* Datos del administrador */}
         <div>
           <div className="flex items-center gap-2 mb-3">
@@ -177,6 +176,19 @@ function AdminFormModal({ open, onClose, onSaved, editing }: AdminFormProps) {
                 error={errors.adminPassword?.message}
                 {...register('adminPassword')}
               />
+            </div>
+            <div className="sm:col-span-2">
+              <label className="flex items-start gap-3 cursor-pointer rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 hover:bg-slate-100 transition-colors">
+                <input
+                  type="checkbox"
+                  className="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-600 accent-brand-600 cursor-pointer"
+                  {...register('canDownloadMetrics')}
+                />
+                <div>
+                  <p className="text-sm font-medium text-slate-700">Permitir descarga de métricas en CSV</p>
+                  <p className="text-xs text-slate-400 mt-0.5">El administrador podrá exportar datos del dashboard y análisis en formato CSV</p>
+                </div>
+              </label>
             </div>
           </div>
         </div>
@@ -241,14 +253,19 @@ interface DeleteModalProps {
 
 function DeleteModal({ open, admin, onClose, onSaved }: DeleteModalProps) {
   const [loading, setLoading] = useState(false);
+  const { success, error } = useToast();
 
   const handleDelete = async () => {
     if (!admin) return;
     setLoading(true);
     try {
       await superadminService.deleteAdmin(admin.id);
+      success('Administrador eliminado', `La cuenta de ${admin.name} fue eliminada.`);
       onSaved();
       onClose();
+    } catch (err: unknown) {
+      const { title, detail } = parseError(err);
+      error(title, detail);
     } finally {
       setLoading(false);
     }
@@ -289,6 +306,7 @@ export default function AdministradoresPage() {
   const [deleteAdmin, setDeleteAdmin] = useState<AdminWithCompany | null>(null);
   const [toggling,   setToggling]   = useState<string | null>(null);
 
+  const { success, error } = useToast();
   const limit = 20;
 
   const load = useCallback(async () => {
@@ -297,10 +315,13 @@ export default function AdministradoresPage() {
       const result = await superadminService.getAdmins({ page, limit, search: search || undefined });
       setAdmins(result.data);
       setTotal(result.total);
+    } catch (err: unknown) {
+      const { title, detail } = parseError(err);
+      error(title, detail);
     } finally {
       setLoading(false);
     }
-  }, [page, search]);
+  }, [page, search, error]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -310,11 +331,16 @@ export default function AdministradoresPage() {
     setPage(1);
   };
 
-  const handleToggle = async (id: string) => {
-    setToggling(id);
+  const handleToggle = async (admin: AdminWithCompany) => {
+    setToggling(admin.id);
     try {
-      const updated = await superadminService.toggleAdmin(id);
-      setAdmins(prev => prev.map(a => a.id === id ? updated : a));
+      const updated = await superadminService.toggleAdmin(admin.id);
+      setAdmins(prev => prev.map(a => a.id === admin.id ? updated : a));
+      const label = updated.active ? 'activado' : 'desactivado';
+      success(`Administrador ${label}`, `La cuenta de ${admin.name} fue ${label}.`);
+    } catch (err: unknown) {
+      const { title, detail } = parseError(err);
+      error(title, detail);
     } finally {
       setToggling(null);
     }
@@ -433,7 +459,7 @@ export default function AdministradoresPage() {
                         <button
                           title={admin.active ? 'Desactivar' : 'Activar'}
                           disabled={toggling === admin.id}
-                          onClick={() => handleToggle(admin.id)}
+                          onClick={() => handleToggle(admin)}
                           className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors disabled:opacity-40"
                         >
                           {admin.active

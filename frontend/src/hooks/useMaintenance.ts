@@ -16,7 +16,7 @@ export function useMaintenance(initialFilters: MaintenanceFilters = {}) {
     try {
       const [res, upcomingData] = await Promise.all([
         maintenanceService.getAll(filters),
-        maintenanceService.getUpcoming(60),
+        maintenanceService.getUpcoming(365),
       ]);
       setRecords(res.data);
       setTotal(res.meta.total);

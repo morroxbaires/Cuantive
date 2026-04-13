@@ -35,12 +35,13 @@ export interface AuthTokens {
 }
 
 export interface AuthUser {
-  id:          string;
-  name:        string;
-  email:       string;
-  role:        Role;
-  companyId:   string | null;
-  companyName: string | null;
+  id:                 string;
+  name:               string;
+  email:              string;
+  role:               Role;
+  companyId:          string | null;
+  companyName:        string | null;
+  canDownloadMetrics: boolean;
 }
 
 export interface LoginResponse {

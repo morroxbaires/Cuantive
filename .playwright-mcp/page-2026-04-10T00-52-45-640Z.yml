@@ -1,0 +1,195 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e6]:
+      - generic [ref=e7]:
+        - img [ref=e9]
+        - generic [ref=e11]: Cuantive
+      - navigation [ref=e12]:
+        - link "Dashboard" [ref=e13] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e14]
+          - generic [ref=e19]: Dashboard
+        - link "Análisis" [ref=e20] [cursor=pointer]:
+          - /url: /dashboard/analytics
+          - img [ref=e21]
+          - generic [ref=e22]: Análisis
+        - link "Vehículos" [ref=e23] [cursor=pointer]:
+          - /url: /dashboard/vehicles
+          - img [ref=e24]
+          - generic [ref=e29]: Vehículos
+          - img [ref=e30]
+        - link "Conductores" [ref=e32] [cursor=pointer]:
+          - /url: /dashboard/drivers
+          - img [ref=e33]
+          - generic [ref=e38]: Conductores
+        - link "Turnos" [ref=e39] [cursor=pointer]:
+          - /url: /dashboard/turnos
+          - img [ref=e40]
+          - generic [ref=e43]: Turnos
+        - link "Repostaje" [ref=e44] [cursor=pointer]:
+          - /url: /dashboard/fuel-loads
+          - img [ref=e45]
+          - generic [ref=e48]: Repostaje
+        - link "Mantenimiento" [ref=e49] [cursor=pointer]:
+          - /url: /dashboard/maintenance
+          - img [ref=e50]
+          - generic [ref=e52]: Mantenimiento
+        - link "Siniestros" [ref=e53] [cursor=pointer]:
+          - /url: /dashboard/siniestros
+          - img [ref=e54]
+          - generic [ref=e56]: Siniestros
+        - link "Satisfacción" [ref=e57] [cursor=pointer]:
+          - /url: /dashboard/satisfaccion
+          - img [ref=e58]
+          - generic [ref=e61]: Satisfacción
+        - link "Alertas" [ref=e62] [cursor=pointer]:
+          - /url: /dashboard/alerts
+          - img [ref=e63]
+          - generic [ref=e66]: Alertas
+        - link "Configuración" [ref=e67] [cursor=pointer]:
+          - /url: /dashboard/settings
+          - img [ref=e68]
+          - generic [ref=e71]: Configuración
+      - generic [ref=e72]:
+        - link "P Prueba admin" [ref=e73] [cursor=pointer]:
+          - /url: /dashboard/profile
+          - generic [ref=e74]: P
+          - generic [ref=e75]:
+            - paragraph [ref=e76]: Prueba
+            - paragraph [ref=e77]: admin
+          - img [ref=e78]
+        - button "Cerrar sesión" [ref=e82] [cursor=pointer]:
+          - img [ref=e83]
+          - text: Cerrar sesión
+    - generic [ref=e86]:
+      - banner [ref=e87]:
+        - heading "Vehículos" [level=1] [ref=e88]
+        - generic [ref=e89]:
+          - button [ref=e90] [cursor=pointer]:
+            - img [ref=e91]
+          - generic [ref=e94]:
+            - generic [ref=e95]: P
+            - generic [ref=e96]:
+              - paragraph [ref=e97]: Prueba
+              - paragraph [ref=e98]: Superroot
+      - main [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - generic [ref=e102]:
+              - heading "Vehículos" [level=2] [ref=e103]
+              - paragraph [ref=e104]: 1 vehículo en flota
+            - button "Nuevo vehículo" [ref=e105] [cursor=pointer]:
+              - img [ref=e106]
+              - text: Nuevo vehículo
+          - generic [ref=e107]:
+            - generic [ref=e108]:
+              - img
+              - textbox "Buscar por patente, marca, modelo…" [ref=e109]
+            - combobox [ref=e110]:
+              - option "Todos los tipos" [selected]
+              - option "Automóvil"
+              - option "Camioneta"
+              - option "Camión"
+              - option "Taxi"
+          - table [ref=e193]:
+            - rowgroup [ref=e194]:
+              - row "Patente Vehículo Tipo Odómetro Rendimiento esperado Conductores Estado" [ref=e195]:
+                - columnheader "Patente" [ref=e196]
+                - columnheader "Vehículo" [ref=e197]
+                - columnheader "Tipo" [ref=e198]
+                - columnheader "Odómetro" [ref=e199]
+                - columnheader "Rendimiento esperado" [ref=e200]
+                - columnheader "Conductores" [ref=e201]
+                - columnheader "Estado" [ref=e202]
+                - columnheader [ref=e203]
+            - rowgroup [ref=e204]:
+              - row "AAA 1234 Toyota Hilux (2022) Camioneta 45.000 km 12 km/L — Activo" [ref=e205]:
+                - cell "AAA 1234" [ref=e206]
+                - cell "Toyota Hilux (2022)" [ref=e207]:
+                  - generic [ref=e208]:
+                    - text: Toyota Hilux
+                    - generic [ref=e209]: (2022)
+                - cell "Camioneta" [ref=e210]:
+                  - generic [ref=e211]: Camioneta
+                - cell "45.000 km" [ref=e212]:
+                  - generic [ref=e213]: 45.000 km
+                - cell "12 km/L" [ref=e214]:
+                  - generic [ref=e215]: 12 km/L
+                - cell "—" [ref=e216]
+                - cell "Activo" [ref=e217]:
+                  - generic [ref=e218]: Activo
+                - cell [ref=e220]:
+                  - generic [ref=e221]:
+                    - button [ref=e222] [cursor=pointer]:
+                      - img [ref=e223]
+                    - button [ref=e226] [cursor=pointer]:
+                      - img [ref=e227]
+                    - button [ref=e230] [cursor=pointer]:
+                      - img [ref=e231]
+          - generic [ref=e236]:
+            - generic [ref=e237]:
+              - heading "Nuevo vehículo" [level=2] [ref=e239]
+              - button [ref=e240] [cursor=pointer]:
+                - img [ref=e241]
+            - generic [ref=e245]:
+              - generic [ref=e246]:
+                - generic [ref=e247]:
+                  - generic [ref=e248]: Patente*
+                  - textbox "Patente*" [ref=e250]:
+                    - /placeholder: ABC 1234
+                    - text: BBB 5678
+                - generic [ref=e251]:
+                  - generic [ref=e252]: Tipo de vehículo
+                  - combobox "Tipo de vehículo" [ref=e253]:
+                    - option "Seleccionar…"
+                    - option "Automóvil"
+                    - option "Camioneta"
+                    - option "Camión" [selected]
+                    - option "Taxi"
+                - generic [ref=e254]:
+                  - generic [ref=e255]: Marca*
+                  - textbox "Marca*" [ref=e257]:
+                    - /placeholder: Toyota
+                    - text: Ford
+                - generic [ref=e258]:
+                  - generic [ref=e259]: Modelo*
+                  - textbox "Modelo*" [ref=e261]:
+                    - /placeholder: Hilux
+                    - text: Transit
+                - generic [ref=e262]:
+                  - generic [ref=e263]: Año*
+                  - spinbutton "Año*" [active] [ref=e265]: "2021"
+                - generic [ref=e266]:
+                  - generic [ref=e267]: Color
+                  - textbox "Color" [ref=e269]:
+                    - /placeholder: Blanco
+                - generic [ref=e270]:
+                  - generic [ref=e271]: Número de coche
+                  - textbox "Número de coche" [ref=e273]:
+                    - /placeholder: "Ej: 1234"
+                - generic [ref=e274]:
+                  - generic [ref=e275]: Odómetro actual (km)
+                  - spinbutton "Odómetro actual (km)" [ref=e277]
+                - generic [ref=e278]:
+                  - generic [ref=e279]: Tipo de combustible
+                  - combobox "Tipo de combustible" [ref=e280]:
+                    - option "Seleccionar…" [selected]
+                    - option "Gasoil"
+                    - option "Eléctrico"
+                    - option "Nafta"
+                - generic [ref=e281]:
+                  - generic [ref=e282]: Rendimiento esperado (km/L)
+                  - spinbutton "Rendimiento esperado (km/L)" [ref=e284]
+                  - paragraph [ref=e285]: Kilómetros esperados por L
+              - generic [ref=e286]:
+                - generic [ref=e288]:
+                  - img [ref=e289]
+                  - text: Conductores asignados
+                - generic [ref=e294]:
+                  - img
+                  - textbox "Buscar conductor..." [ref=e295]
+                - generic [ref=e297]: No hay conductores activos
+            - generic [ref=e298]:
+              - button "Cancelar" [ref=e299] [cursor=pointer]
+              - button "Crear vehículo" [ref=e300] [cursor=pointer]
+  - alert [ref=e123]

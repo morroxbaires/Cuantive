@@ -1,0 +1,160 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e6]:
+      - generic [ref=e7]:
+        - img [ref=e9]
+        - generic [ref=e11]: Cuantive
+      - navigation [ref=e12]:
+        - link "Dashboard" [ref=e13] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e14]
+          - generic [ref=e19]: Dashboard
+        - link "Análisis" [ref=e20] [cursor=pointer]:
+          - /url: /dashboard/analytics
+          - img [ref=e21]
+          - generic [ref=e22]: Análisis
+        - link "Vehículos" [ref=e23] [cursor=pointer]:
+          - /url: /dashboard/vehicles
+          - img [ref=e24]
+          - generic [ref=e29]: Vehículos
+          - img [ref=e30]
+        - link "Conductores" [ref=e32] [cursor=pointer]:
+          - /url: /dashboard/drivers
+          - img [ref=e33]
+          - generic [ref=e38]: Conductores
+        - link "Turnos" [ref=e39] [cursor=pointer]:
+          - /url: /dashboard/turnos
+          - img [ref=e40]
+          - generic [ref=e43]: Turnos
+        - link "Repostaje" [ref=e44] [cursor=pointer]:
+          - /url: /dashboard/fuel-loads
+          - img [ref=e45]
+          - generic [ref=e48]: Repostaje
+        - link "Mantenimiento" [ref=e49] [cursor=pointer]:
+          - /url: /dashboard/maintenance
+          - img [ref=e50]
+          - generic [ref=e52]: Mantenimiento
+        - link "Siniestros" [ref=e53] [cursor=pointer]:
+          - /url: /dashboard/siniestros
+          - img [ref=e54]
+          - generic [ref=e56]: Siniestros
+        - link "Satisfacción" [ref=e57] [cursor=pointer]:
+          - /url: /dashboard/satisfaccion
+          - img [ref=e58]
+          - generic [ref=e61]: Satisfacción
+        - link "Alertas" [ref=e62] [cursor=pointer]:
+          - /url: /dashboard/alerts
+          - img [ref=e63]
+          - generic [ref=e66]: Alertas
+        - link "Configuración" [ref=e67] [cursor=pointer]:
+          - /url: /dashboard/settings
+          - img [ref=e68]
+          - generic [ref=e71]: Configuración
+      - generic [ref=e72]:
+        - link "P Prueba admin" [ref=e73] [cursor=pointer]:
+          - /url: /dashboard/profile
+          - generic [ref=e74]: P
+          - generic [ref=e75]:
+            - paragraph [ref=e76]: Prueba
+            - paragraph [ref=e77]: admin
+          - img [ref=e78]
+        - button "Cerrar sesión" [ref=e82] [cursor=pointer]:
+          - img [ref=e83]
+          - text: Cerrar sesión
+    - generic [ref=e86]:
+      - banner [ref=e87]:
+        - heading "Vehículos" [level=1] [ref=e88]
+        - generic [ref=e89]:
+          - button [ref=e90] [cursor=pointer]:
+            - img [ref=e91]
+          - generic [ref=e94]:
+            - generic [ref=e95]: P
+            - generic [ref=e96]:
+              - paragraph [ref=e97]: Prueba
+              - paragraph [ref=e98]: Superroot
+      - main [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - generic [ref=e102]:
+              - heading "Vehículos" [level=2] [ref=e103]
+              - paragraph [ref=e104]: 2 vehículos en flota
+            - button "Nuevo vehículo" [ref=e105] [cursor=pointer]:
+              - img [ref=e106]
+              - text: Nuevo vehículo
+          - generic [ref=e107]:
+            - generic [ref=e108]:
+              - img
+              - textbox "Buscar por patente, marca, modelo…" [ref=e109]
+            - combobox [ref=e110]:
+              - option "Todos los tipos" [selected]
+              - option "Automóvil"
+              - option "Camioneta"
+              - option "Camión"
+              - option "Taxi"
+          - table [ref=e442]:
+            - rowgroup [ref=e443]:
+              - row "Patente Vehículo Tipo Odómetro Rendimiento esperado Conductores Estado" [ref=e444]:
+                - columnheader "Patente" [ref=e445]
+                - columnheader "Vehículo" [ref=e446]
+                - columnheader "Tipo" [ref=e447]
+                - columnheader "Odómetro" [ref=e448]
+                - columnheader "Rendimiento esperado" [ref=e449]
+                - columnheader "Conductores" [ref=e450]
+                - columnheader "Estado" [ref=e451]
+                - columnheader [ref=e452]
+            - rowgroup [ref=e453]:
+              - row "BBB 5678 Ford Transit (2021) Camión 80.000 km — — Activo" [ref=e454]:
+                - cell "BBB 5678" [ref=e455]
+                - cell "Ford Transit (2021)" [ref=e456]:
+                  - generic [ref=e457]:
+                    - text: Ford Transit
+                    - generic [ref=e458]: (2021)
+                - cell "Camión" [ref=e459]:
+                  - generic [ref=e460]: Camión
+                - cell "80.000 km" [ref=e461]:
+                  - generic [ref=e462]: 80.000 km
+                - cell "—" [ref=e463]
+                - cell "—" [ref=e464]
+                - cell "Activo" [ref=e465]:
+                  - generic [ref=e466]: Activo
+                - cell [ref=e468]:
+                  - generic [ref=e469]:
+                    - button [ref=e470] [cursor=pointer]:
+                      - img [ref=e471]
+                    - button [ref=e474] [cursor=pointer]:
+                      - img [ref=e475]
+                    - button [active] [ref=e478] [cursor=pointer]:
+                      - img [ref=e479]
+              - row "AAA 1234 Toyota Hilux (2022) Camioneta 46.500 km 12 km/L — Activo" [ref=e482]:
+                - cell "AAA 1234" [ref=e483]
+                - cell "Toyota Hilux (2022)" [ref=e484]:
+                  - generic [ref=e485]:
+                    - text: Toyota Hilux
+                    - generic [ref=e486]: (2022)
+                - cell "Camioneta" [ref=e487]:
+                  - generic [ref=e488]: Camioneta
+                - cell "46.500 km" [ref=e489]:
+                  - generic [ref=e490]: 46.500 km
+                - cell "12 km/L" [ref=e491]:
+                  - generic [ref=e492]: 12 km/L
+                - cell "—" [ref=e493]
+                - cell "Activo" [ref=e494]:
+                  - generic [ref=e495]: Activo
+                - cell [ref=e497]:
+                  - generic [ref=e498]:
+                    - button [ref=e499] [cursor=pointer]:
+                      - img [ref=e500]
+                    - button [ref=e503] [cursor=pointer]:
+                      - img [ref=e504]
+                    - button [ref=e507] [cursor=pointer]:
+                      - img [ref=e508]
+          - generic [ref=e513]:
+            - generic [ref=e514]:
+              - heading "Eliminar vehículo" [level=2] [ref=e516]
+              - button [ref=e517] [cursor=pointer]:
+                - img [ref=e518]
+            - paragraph [ref=e522]: ¿Estás seguro de eliminar BBB 5678? Esta acción no se puede deshacer.
+            - generic [ref=e523]:
+              - button "Cancelar" [ref=e524] [cursor=pointer]
+              - button "Confirmar" [ref=e525] [cursor=pointer]
+  - alert [ref=e123]

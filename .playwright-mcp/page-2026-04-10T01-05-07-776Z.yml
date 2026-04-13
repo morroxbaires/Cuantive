@@ -1,0 +1,157 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e6]
+  - generic [ref=e78]:
+    - complementary [ref=e79]:
+      - generic [ref=e80]:
+        - img [ref=e82]
+        - generic [ref=e84]: Cuantive
+      - navigation [ref=e85]:
+        - link "Dashboard" [ref=e86] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e87]
+          - generic [ref=e92]: Dashboard
+          - img [ref=e93]
+        - link "Análisis" [ref=e95] [cursor=pointer]:
+          - /url: /dashboard/analytics
+          - img [ref=e96]
+          - generic [ref=e97]: Análisis
+        - link "Vehículos" [ref=e98] [cursor=pointer]:
+          - /url: /dashboard/vehicles
+          - img [ref=e99]
+          - generic [ref=e104]: Vehículos
+        - link "Conductores" [ref=e105] [cursor=pointer]:
+          - /url: /dashboard/drivers
+          - img [ref=e106]
+          - generic [ref=e111]: Conductores
+        - link "Turnos" [ref=e112] [cursor=pointer]:
+          - /url: /dashboard/turnos
+          - img [ref=e113]
+          - generic [ref=e116]: Turnos
+        - link "Repostaje" [ref=e117] [cursor=pointer]:
+          - /url: /dashboard/fuel-loads
+          - img [ref=e118]
+          - generic [ref=e121]: Repostaje
+        - link "Mantenimiento" [ref=e122] [cursor=pointer]:
+          - /url: /dashboard/maintenance
+          - img [ref=e123]
+          - generic [ref=e125]: Mantenimiento
+        - link "Siniestros" [ref=e126] [cursor=pointer]:
+          - /url: /dashboard/siniestros
+          - img [ref=e127]
+          - generic [ref=e129]: Siniestros
+        - link "Satisfacción" [ref=e130] [cursor=pointer]:
+          - /url: /dashboard/satisfaccion
+          - img [ref=e131]
+          - generic [ref=e134]: Satisfacción
+        - link "Alertas" [ref=e135] [cursor=pointer]:
+          - /url: /dashboard/alerts
+          - img [ref=e136]
+          - generic [ref=e139]: Alertas
+        - link "Configuración" [ref=e140] [cursor=pointer]:
+          - /url: /dashboard/settings
+          - img [ref=e141]
+          - generic [ref=e144]: Configuración
+      - generic [ref=e145]:
+        - link "P Prueba admin" [ref=e146] [cursor=pointer]:
+          - /url: /dashboard/profile
+          - generic [ref=e147]: P
+          - generic [ref=e148]:
+            - paragraph [ref=e149]: Prueba
+            - paragraph [ref=e150]: admin
+          - img [ref=e151]
+        - button "Cerrar sesión" [ref=e155] [cursor=pointer]:
+          - img [ref=e156]
+          - text: Cerrar sesión
+    - generic [ref=e159]:
+      - banner [ref=e160]:
+        - heading "Dashboard" [level=1] [ref=e161]
+        - generic [ref=e162]:
+          - button [ref=e163] [cursor=pointer]:
+            - img [ref=e164]
+          - generic [ref=e167]:
+            - generic [ref=e168]: P
+            - generic [ref=e169]:
+              - paragraph [ref=e170]: Prueba
+              - paragraph [ref=e171]: PruebaAutomation
+      - main [ref=e172]:
+        - generic [ref=e173]:
+          - generic [ref=e174]:
+            - generic [ref=e175]:
+              - heading "Panel de control" [level=2] [ref=e176]
+              - paragraph [ref=e177]: abril de 2026
+            - generic [ref=e178]:
+              - button "Vehículos" [ref=e179] [cursor=pointer]:
+                - img [ref=e180]
+                - text: Vehículos
+              - button "Conductores" [ref=e185] [cursor=pointer]:
+                - img [ref=e186]
+                - text: Conductores
+            - textbox [ref=e191]: 2026-04
+            - generic [ref=e192]:
+              - combobox [ref=e193]:
+                - option "Todos los vehículos" [selected]
+                - option "AAA 1234 — Toyota Hilux"
+              - img
+            - button "Descargar CSV" [ref=e194] [cursor=pointer]:
+              - img [ref=e195]
+              - text: Descargar CSV
+          - generic [ref=e198]:
+            - generic [ref=e199]:
+              - img [ref=e201]
+              - generic [ref=e206]:
+                - paragraph [ref=e207]: Total vehículos
+                - paragraph [ref=e208]: 1vehículos
+            - generic [ref=e209]:
+              - img [ref=e211]
+              - generic [ref=e213]:
+                - paragraph [ref=e214]: Gasto total
+                - paragraph [ref=e215]: $ 111
+            - generic [ref=e216]:
+              - img [ref=e218]
+              - generic [ref=e221]:
+                - paragraph [ref=e222]: Gasto combustible
+                - paragraph [ref=e223]: $ 111
+            - generic [ref=e224]:
+              - img [ref=e226]
+              - generic [ref=e228]:
+                - paragraph [ref=e229]: Gasto mantenimiento
+                - paragraph [ref=e230]: $ 0
+            - generic [ref=e231]:
+              - img [ref=e233]
+              - generic [ref=e237]:
+                - paragraph [ref=e238]: KM recorridos
+                - paragraph [ref=e239]: 500km
+            - generic [ref=e240]:
+              - img [ref=e242]
+              - generic [ref=e245]:
+                - paragraph [ref=e246]: Rendimiento km/L
+                - paragraph [ref=e247]: 8,33km/L
+          - generic [ref=e248]:
+            - generic [ref=e250]:
+              - heading "Detalle por vehículo" [level=3] [ref=e251]
+              - paragraph [ref=e252]: abril de 2026
+            - table [ref=e254]:
+              - rowgroup [ref=e255]:
+                - row "Vehículo Repostajes Combustible Gasto combust. Mant. Gasto mant. Gasto total KM recorridos Rendimiento" [ref=e256]:
+                  - columnheader "Vehículo" [ref=e257]
+                  - columnheader "Repostajes" [ref=e258]
+                  - columnheader "Combustible" [ref=e259]
+                  - columnheader "Gasto combust." [ref=e260]
+                  - columnheader "Mant." [ref=e261]
+                  - columnheader "Gasto mant." [ref=e262]
+                  - columnheader "Gasto total" [ref=e263]
+                  - columnheader "KM recorridos" [ref=e264]
+                  - columnheader "Rendimiento" [ref=e265]
+              - rowgroup [ref=e266]:
+                - row "AAA 1234 1 60 L $ 111 — — $ 111 500 km 8,33 km/L" [ref=e267]:
+                  - cell "AAA 1234" [ref=e268]
+                  - cell "1" [ref=e269]
+                  - cell "60 L" [ref=e270]:
+                    - generic [ref=e271]: 60 L
+                  - cell "$ 111" [ref=e272]
+                  - cell "—" [ref=e273]
+                  - cell "—" [ref=e274]
+                  - cell "$ 111" [ref=e275]
+                  - cell "500 km" [ref=e276]
+                  - cell "8,33 km/L" [ref=e277]:
+                    - generic [ref=e278]: 8,33 km/L

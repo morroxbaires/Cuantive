@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, Truck, Users, Fuel, Wrench,
-  Bell, Settings, LogOut, ChevronRight, Zap, BarChart2, ClipboardList, UserCircle,
+  Bell, Settings, LogOut, ChevronRight, Zap, BarChart2, ClipboardList, UserCircle, AlertTriangle, Smile,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
@@ -18,7 +18,9 @@ const navItems = [
   { label: 'Turnos',        href: '/dashboard/turnos',      icon: ClipboardList },
   { label: 'Repostaje',     href: '/dashboard/fuel-loads',  icon: Fuel },
   { label: 'Mantenimiento', href: '/dashboard/maintenance', icon: Wrench },
-  { label: 'Alertas',       href: '/dashboard/alerts',      icon: Bell },
+  { label: 'Siniestros',    href: '/dashboard/siniestros',    icon: AlertTriangle },
+  { label: 'Satisfacción',  href: '/dashboard/satisfaccion',  icon: Smile },
+  { label: 'Alertas',       href: '/dashboard/alerts',        icon: Bell },
   { label: 'Configuración', href: '/dashboard/settings',    icon: Settings },
 ];
 

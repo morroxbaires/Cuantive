@@ -1,0 +1,112 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e6]:
+      - generic [ref=e7]:
+        - img [ref=e9]
+        - generic [ref=e11]: Cuantive
+      - navigation [ref=e12]:
+        - link "Dashboard" [ref=e13] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e14]
+          - generic [ref=e19]: Dashboard
+        - link "Análisis" [ref=e20] [cursor=pointer]:
+          - /url: /dashboard/analytics
+          - img [ref=e21]
+          - generic [ref=e22]: Análisis
+        - link "Vehículos" [ref=e23] [cursor=pointer]:
+          - /url: /dashboard/vehicles
+          - img [ref=e24]
+          - generic [ref=e29]: Vehículos
+        - link "Conductores" [ref=e30] [cursor=pointer]:
+          - /url: /dashboard/drivers
+          - img [ref=e31]
+          - generic [ref=e36]: Conductores
+        - link "Turnos" [ref=e37] [cursor=pointer]:
+          - /url: /dashboard/turnos
+          - img [ref=e38]
+          - generic [ref=e41]: Turnos
+        - link "Repostaje" [ref=e42] [cursor=pointer]:
+          - /url: /dashboard/fuel-loads
+          - img [ref=e43]
+          - generic [ref=e46]: Repostaje
+        - link "Mantenimiento" [ref=e47] [cursor=pointer]:
+          - /url: /dashboard/maintenance
+          - img [ref=e48]
+          - generic [ref=e50]: Mantenimiento
+          - img [ref=e51]
+        - link "Siniestros" [ref=e53] [cursor=pointer]:
+          - /url: /dashboard/siniestros
+          - img [ref=e54]
+          - generic [ref=e56]: Siniestros
+        - link "Satisfacción" [ref=e57] [cursor=pointer]:
+          - /url: /dashboard/satisfaccion
+          - img [ref=e58]
+          - generic [ref=e61]: Satisfacción
+        - link "Alertas" [ref=e62] [cursor=pointer]:
+          - /url: /dashboard/alerts
+          - img [ref=e63]
+          - generic [ref=e66]: Alertas
+        - link "Configuración" [ref=e67] [cursor=pointer]:
+          - /url: /dashboard/settings
+          - img [ref=e68]
+          - generic [ref=e71]: Configuración
+      - generic [ref=e72]:
+        - link "P Prueba admin" [ref=e73] [cursor=pointer]:
+          - /url: /dashboard/profile
+          - generic [ref=e74]: P
+          - generic [ref=e75]:
+            - paragraph [ref=e76]: Prueba
+            - paragraph [ref=e77]: admin
+          - img [ref=e78]
+        - button "Cerrar sesión" [ref=e82] [cursor=pointer]:
+          - img [ref=e83]
+          - text: Cerrar sesión
+    - generic [ref=e86]:
+      - banner [ref=e87]:
+        - heading "Mantenimiento" [level=1] [ref=e88]
+        - generic [ref=e89]:
+          - button [ref=e90] [cursor=pointer]:
+            - img [ref=e91]
+          - generic [ref=e94]:
+            - generic [ref=e95]: P
+            - generic [ref=e96]:
+              - paragraph [ref=e97]: Prueba
+              - paragraph [ref=e98]: Superroot
+      - main [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - generic [ref=e102]:
+              - heading "Mantenimiento" [level=2] [ref=e103]
+              - paragraph [ref=e104]: 1 registro · 0 próximos
+            - button "Nuevo mantenimiento" [ref=e105] [cursor=pointer]:
+              - img [ref=e106]
+              - text: Nuevo mantenimiento
+          - table [ref=e172]:
+            - rowgroup [ref=e173]:
+              - row "Fecha Vehículo Tipo Descripción Costo Estado Próximo" [ref=e174]:
+                - columnheader "Fecha" [ref=e175]
+                - columnheader "Vehículo" [ref=e176]
+                - columnheader "Tipo" [ref=e177]
+                - columnheader "Descripción" [ref=e178]
+                - columnheader "Costo" [ref=e179]
+                - columnheader "Estado" [ref=e180]
+                - columnheader "Próximo" [ref=e181]
+                - columnheader [ref=e182]
+            - rowgroup [ref=e183]:
+              - row "09/04/2026 AAA 1234 Cambio de aceite Cambio de aceite 5W30 + filtro $ 2.500 Completado 30/09/2026" [ref=e184]:
+                - cell "09/04/2026" [ref=e185]
+                - cell "AAA 1234" [ref=e186]
+                - cell "Cambio de aceite" [ref=e187]
+                - cell "Cambio de aceite 5W30 + filtro" [ref=e188]:
+                  - generic [ref=e189]: Cambio de aceite 5W30 + filtro
+                - cell "$ 2.500" [ref=e190]
+                - cell "Completado" [ref=e191]:
+                  - generic [ref=e192]: Completado
+                - cell "30/09/2026" [ref=e194]
+                - cell [ref=e195]:
+                  - generic [ref=e196]:
+                    - button [ref=e197] [cursor=pointer]:
+                      - img [ref=e198]
+                    - button [ref=e201] [cursor=pointer]:
+                      - img [ref=e202]
+  - alert [ref=e116]

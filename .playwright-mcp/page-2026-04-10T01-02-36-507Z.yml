@@ -1,0 +1,159 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e6]:
+      - generic [ref=e7]:
+        - img [ref=e9]
+        - generic [ref=e11]: Cuantive
+      - navigation [ref=e12]:
+        - link "Dashboard" [ref=e13] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e14]
+          - generic [ref=e19]: Dashboard
+        - link "Análisis" [ref=e20] [cursor=pointer]:
+          - /url: /dashboard/analytics
+          - img [ref=e21]
+          - generic [ref=e22]: Análisis
+        - link "Vehículos" [ref=e23] [cursor=pointer]:
+          - /url: /dashboard/vehicles
+          - img [ref=e24]
+          - generic [ref=e29]: Vehículos
+        - link "Conductores" [ref=e30] [cursor=pointer]:
+          - /url: /dashboard/drivers
+          - img [ref=e31]
+          - generic [ref=e36]: Conductores
+        - link "Turnos" [ref=e37] [cursor=pointer]:
+          - /url: /dashboard/turnos
+          - img [ref=e38]
+          - generic [ref=e41]: Turnos
+        - link "Repostaje" [ref=e42] [cursor=pointer]:
+          - /url: /dashboard/fuel-loads
+          - img [ref=e43]
+          - generic [ref=e46]: Repostaje
+          - img [ref=e47]
+        - link "Mantenimiento" [ref=e49] [cursor=pointer]:
+          - /url: /dashboard/maintenance
+          - img [ref=e50]
+          - generic [ref=e52]: Mantenimiento
+        - link "Siniestros" [ref=e53] [cursor=pointer]:
+          - /url: /dashboard/siniestros
+          - img [ref=e54]
+          - generic [ref=e56]: Siniestros
+        - link "Satisfacción" [ref=e57] [cursor=pointer]:
+          - /url: /dashboard/satisfaccion
+          - img [ref=e58]
+          - generic [ref=e61]: Satisfacción
+        - link "Alertas" [ref=e62] [cursor=pointer]:
+          - /url: /dashboard/alerts
+          - img [ref=e63]
+          - generic [ref=e66]: Alertas
+        - link "Configuración" [ref=e67] [cursor=pointer]:
+          - /url: /dashboard/settings
+          - img [ref=e68]
+          - generic [ref=e71]: Configuración
+      - generic [ref=e72]:
+        - link "P Prueba admin" [ref=e73] [cursor=pointer]:
+          - /url: /dashboard/profile
+          - generic [ref=e74]: P
+          - generic [ref=e75]:
+            - paragraph [ref=e76]: Prueba
+            - paragraph [ref=e77]: admin
+          - img [ref=e78]
+        - button "Cerrar sesión" [ref=e82] [cursor=pointer]:
+          - img [ref=e83]
+          - text: Cerrar sesión
+    - generic [ref=e86]:
+      - banner [ref=e87]:
+        - heading "Repostaje" [level=1] [ref=e88]
+        - generic [ref=e89]:
+          - button [ref=e90] [cursor=pointer]:
+            - img [ref=e91]
+          - generic [ref=e94]:
+            - generic [ref=e95]: P
+            - generic [ref=e96]:
+              - paragraph [ref=e97]: Prueba
+              - paragraph [ref=e98]: Superroot
+      - main [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - generic [ref=e102]:
+              - heading "Repostaje" [level=2] [ref=e103]
+              - paragraph [ref=e104]: 0 registros
+            - button "Nuevo repostaje" [active] [ref=e105] [cursor=pointer]:
+              - img [ref=e106]
+              - text: Nuevo repostaje
+          - generic [ref=e107]:
+            - combobox [ref=e108]:
+              - option "Todos los vehículos" [selected]
+              - option "AAA 1234 — Toyota Hilux"
+            - combobox [ref=e109]:
+              - option "Todos los conductores" [selected]
+              - option "Carlos García"
+              - option "María López"
+          - generic [ref=e110]:
+            - generic [ref=e111]:
+              - generic [ref=e112]:
+                - paragraph [ref=e113]: Costo total
+                - img [ref=e114]
+                - generic: Suma de (litros × precio/unidad) de todas las cargas en el período y filtros activos.
+              - paragraph [ref=e117]: $ 0
+            - generic [ref=e118]:
+              - generic [ref=e119]:
+                - paragraph [ref=e120]: Consumo total
+                - img [ref=e121]
+                - generic: Suma de litros o kWh de todas las cargas filtradas.
+              - paragraph [ref=e124]: 0 u
+            - generic [ref=e125]:
+              - paragraph [ref=e126]: Cargas
+              - paragraph [ref=e127]: "0"
+          - generic [ref=e128]:
+            - img [ref=e130]
+            - heading "Sin repostajes registrados" [level=3] [ref=e133]
+            - paragraph [ref=e134]: Registra el primer repostaje
+            - button "Nuevo repostaje" [ref=e136] [cursor=pointer]:
+              - img [ref=e137]
+              - text: Nuevo repostaje
+          - generic [ref=e141]:
+            - generic [ref=e142]:
+              - heading "Nuevo repostaje" [level=2] [ref=e144]
+              - button [ref=e145] [cursor=pointer]:
+                - img [ref=e146]
+            - generic [ref=e150]:
+              - generic [ref=e151]:
+                - generic [ref=e152]: Vehículo*
+                - combobox "Vehículo*" [ref=e153]:
+                  - option "Seleccionar…"
+                  - option "AAA 1234 — Toyota Hilux" [selected]
+              - generic [ref=e154]:
+                - generic [ref=e155]: Conductor
+                - combobox "Conductor" [ref=e156]:
+                  - option "Sin asignar" [selected]
+                  - option "Carlos García"
+                  - option "María López"
+              - generic [ref=e157]:
+                - generic [ref=e158]: Combustible
+                - textbox "Combustible" [ref=e160]: Gasoil
+              - generic [ref=e161]:
+                - generic [ref=e162]: Fecha*
+                - textbox "Fecha*" [ref=e164]: 2026-04-10
+              - generic [ref=e165]:
+                - generic [ref=e166]: Odómetro (km)
+                - spinbutton "Odómetro (km)" [ref=e168]
+              - generic [ref=e169]:
+                - generic [ref=e170]: Litros*
+                - spinbutton "Litros*" [ref=e172]
+              - generic [ref=e173]:
+                - generic [ref=e174]: Precio por litro*
+                - spinbutton "Precio por litro*" [ref=e176]
+                - paragraph [ref=e177]: Precio precargado desde Configuración. Podés modificarlo si el valor es distinto.
+              - generic [ref=e178]:
+                - generic [ref=e179]: Estación
+                - textbox "Estación" [ref=e181]:
+                  - /placeholder: Ancap Pocitos
+              - generic [ref=e182]:
+                - generic [ref=e183]: Notas
+                - textbox "Notas" [ref=e185]:
+                  - /placeholder: Observaciones…
+            - generic [ref=e186]:
+              - button "Cancelar" [ref=e187] [cursor=pointer]
+              - button "Registrar" [ref=e188] [cursor=pointer]
+  - alert [ref=e138]

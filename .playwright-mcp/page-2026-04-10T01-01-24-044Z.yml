@@ -1,0 +1,138 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e6]:
+      - generic [ref=e7]:
+        - img [ref=e9]
+        - generic [ref=e11]: Cuantive
+      - navigation [ref=e12]:
+        - link "Dashboard" [ref=e13] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e14]
+          - generic [ref=e19]: Dashboard
+        - link "Análisis" [ref=e20] [cursor=pointer]:
+          - /url: /dashboard/analytics
+          - img [ref=e21]
+          - generic [ref=e22]: Análisis
+        - link "Vehículos" [ref=e23] [cursor=pointer]:
+          - /url: /dashboard/vehicles
+          - img [ref=e24]
+          - generic [ref=e29]: Vehículos
+        - link "Conductores" [ref=e30] [cursor=pointer]:
+          - /url: /dashboard/drivers
+          - img [ref=e31]
+          - generic [ref=e36]: Conductores
+        - link "Turnos" [ref=e37] [cursor=pointer]:
+          - /url: /dashboard/turnos
+          - img [ref=e38]
+          - generic [ref=e41]: Turnos
+          - img [ref=e42]
+        - link "Repostaje" [ref=e44] [cursor=pointer]:
+          - /url: /dashboard/fuel-loads
+          - img [ref=e45]
+          - generic [ref=e48]: Repostaje
+        - link "Mantenimiento" [ref=e49] [cursor=pointer]:
+          - /url: /dashboard/maintenance
+          - img [ref=e50]
+          - generic [ref=e52]: Mantenimiento
+        - link "Siniestros" [ref=e53] [cursor=pointer]:
+          - /url: /dashboard/siniestros
+          - img [ref=e54]
+          - generic [ref=e56]: Siniestros
+        - link "Satisfacción" [ref=e57] [cursor=pointer]:
+          - /url: /dashboard/satisfaccion
+          - img [ref=e58]
+          - generic [ref=e61]: Satisfacción
+        - link "Alertas" [ref=e62] [cursor=pointer]:
+          - /url: /dashboard/alerts
+          - img [ref=e63]
+          - generic [ref=e66]: Alertas
+        - link "Configuración" [ref=e67] [cursor=pointer]:
+          - /url: /dashboard/settings
+          - img [ref=e68]
+          - generic [ref=e71]: Configuración
+      - generic [ref=e72]:
+        - link "P Prueba admin" [ref=e73] [cursor=pointer]:
+          - /url: /dashboard/profile
+          - generic [ref=e74]: P
+          - generic [ref=e75]:
+            - paragraph [ref=e76]: Prueba
+            - paragraph [ref=e77]: admin
+          - img [ref=e78]
+        - button "Cerrar sesión" [ref=e82] [cursor=pointer]:
+          - img [ref=e83]
+          - text: Cerrar sesión
+    - generic [ref=e86]:
+      - banner [ref=e87]:
+        - heading "Turnos" [level=1] [ref=e88]
+        - generic [ref=e89]:
+          - button [ref=e90] [cursor=pointer]:
+            - img [ref=e91]
+          - generic [ref=e94]:
+            - generic [ref=e95]: P
+            - generic [ref=e96]:
+              - paragraph [ref=e97]: Prueba
+              - paragraph [ref=e98]: Superroot
+      - main [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - generic [ref=e102]:
+              - heading "Turnos" [level=2] [ref=e103]
+              - paragraph [ref=e104]: 1 turno registrado
+            - button "Nuevo turno" [ref=e105] [cursor=pointer]:
+              - img [ref=e106]
+              - text: Nuevo turno
+          - generic [ref=e107]:
+            - generic [ref=e108]:
+              - img
+              - textbox "Buscar por patente o conductor…" [ref=e109]
+            - combobox [ref=e110]:
+              - option "Todos los vehículos" [selected]
+              - option "AAA 1234"
+            - combobox [ref=e111]:
+              - option "Todos los conductores" [selected]
+              - option "Carlos García"
+              - option "María López"
+            - textbox "Desde" [ref=e112]
+            - textbox "Hasta" [ref=e113]
+          - table [ref=e195]:
+            - rowgroup [ref=e196]:
+              - row "Fecha N° Turno Vehículo Conductor Fichas Km Ocup. Km Libres Km Total" [ref=e197]:
+                - columnheader "Fecha" [ref=e198]
+                - columnheader "N° Turno" [ref=e199]
+                - columnheader "Vehículo" [ref=e200]
+                - columnheader "Conductor" [ref=e201]
+                - columnheader "Fichas" [ref=e202]
+                - columnheader "Km Ocup." [ref=e203]
+                - columnheader "Km Libres" [ref=e204]
+                - columnheader "Km Total" [ref=e205]
+                - columnheader [ref=e206]
+            - rowgroup [ref=e207]:
+              - row "08/04/2026 Turno 1 AAA 1234 Toyota Hilux Carlos García 85 150 km 30 km 180 km 83% ocupado" [ref=e208]:
+                - cell "08/04/2026" [ref=e209]:
+                  - generic [ref=e210]:
+                    - img [ref=e211]
+                    - generic [ref=e213]: 08/04/2026
+                - cell "Turno 1" [ref=e214]:
+                  - generic [ref=e215]: Turno 1
+                - cell "AAA 1234 Toyota Hilux" [ref=e216]:
+                  - generic [ref=e217]:
+                    - text: AAA 1234
+                    - generic [ref=e218]: Toyota Hilux
+                - cell "Carlos García" [ref=e219]:
+                  - generic [ref=e220]: Carlos García
+                - cell "85" [ref=e221]
+                - cell "150 km" [ref=e222]:
+                  - generic [ref=e223]: 150 km
+                - cell "30 km" [ref=e224]:
+                  - generic [ref=e225]: 30 km
+                - cell "180 km 83% ocupado" [ref=e226]:
+                  - generic [ref=e227]:
+                    - generic [ref=e228]: 180 km
+                    - generic [ref=e229]: 83% ocupado
+                - cell [ref=e230]:
+                  - generic [ref=e231]:
+                    - button [ref=e232] [cursor=pointer]:
+                      - img [ref=e233]
+                    - button [ref=e236] [cursor=pointer]:
+                      - img [ref=e237]
+  - alert [ref=e124]

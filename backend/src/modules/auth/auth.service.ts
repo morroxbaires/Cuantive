@@ -144,12 +144,13 @@ export class AuthService {
       accessToken,
       refreshToken,
       user: {
-        id:          user.id,
-        name:        user.name,
-        email:       user.email,
-        role:        user.role as Role,
-        companyId:   user.companyId,
-        companyName: user.company?.name ?? null,
+        id:                 user.id,
+        name:               user.name,
+        email:              user.email,
+        role:               user.role as Role,
+        companyId:          user.companyId,
+        companyName:        user.company?.name ?? null,
+        canDownloadMetrics: user.canDownloadMetrics ?? false,
       },
     };
   }
@@ -259,13 +260,14 @@ export class AuthService {
     return prisma.user.findFirst({
       where:  { id: userId, deletedAt: null },
       select: {
-        id:        true,
-        name:      true,
-        email:     true,
-        role:      true,
-        active:    true,
-        lastLogin: true,
-        createdAt: true,
+        id:                 true,
+        name:               true,
+        email:              true,
+        role:               true,
+        active:             true,
+        lastLogin:          true,
+        createdAt:          true,
+        canDownloadMetrics: true,
         company: {
           select: { id: true, name: true, logo: true, active: true },
         },

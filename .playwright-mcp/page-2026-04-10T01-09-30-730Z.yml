@@ -1,0 +1,150 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e6]:
+      - generic [ref=e7]:
+        - img [ref=e9]
+        - generic [ref=e11]: Cuantive
+      - navigation [ref=e12]:
+        - link "Dashboard" [ref=e13] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e14]
+          - generic [ref=e19]: Dashboard
+        - link "Análisis" [ref=e20] [cursor=pointer]:
+          - /url: /dashboard/analytics
+          - img [ref=e21]
+          - generic [ref=e22]: Análisis
+        - link "Vehículos" [ref=e23] [cursor=pointer]:
+          - /url: /dashboard/vehicles
+          - img [ref=e24]
+          - generic [ref=e29]: Vehículos
+        - link "Conductores" [ref=e30] [cursor=pointer]:
+          - /url: /dashboard/drivers
+          - img [ref=e31]
+          - generic [ref=e36]: Conductores
+        - link "Turnos" [ref=e37] [cursor=pointer]:
+          - /url: /dashboard/turnos
+          - img [ref=e38]
+          - generic [ref=e41]: Turnos
+        - link "Repostaje" [ref=e42] [cursor=pointer]:
+          - /url: /dashboard/fuel-loads
+          - img [ref=e43]
+          - generic [ref=e46]: Repostaje
+        - link "Mantenimiento" [ref=e47] [cursor=pointer]:
+          - /url: /dashboard/maintenance
+          - img [ref=e48]
+          - generic [ref=e50]: Mantenimiento
+        - link "Siniestros" [ref=e51] [cursor=pointer]:
+          - /url: /dashboard/siniestros
+          - img [ref=e52]
+          - generic [ref=e54]: Siniestros
+          - img [ref=e55]
+        - link "Satisfacción" [ref=e57] [cursor=pointer]:
+          - /url: /dashboard/satisfaccion
+          - img [ref=e58]
+          - generic [ref=e61]: Satisfacción
+        - link "Alertas" [ref=e62] [cursor=pointer]:
+          - /url: /dashboard/alerts
+          - img [ref=e63]
+          - generic [ref=e66]: Alertas
+        - link "Configuración" [ref=e67] [cursor=pointer]:
+          - /url: /dashboard/settings
+          - img [ref=e68]
+          - generic [ref=e71]: Configuración
+      - generic [ref=e72]:
+        - link "P Prueba admin" [ref=e73] [cursor=pointer]:
+          - /url: /dashboard/profile
+          - generic [ref=e74]: P
+          - generic [ref=e75]:
+            - paragraph [ref=e76]: Prueba
+            - paragraph [ref=e77]: admin
+          - img [ref=e78]
+        - button "Cerrar sesión" [ref=e82] [cursor=pointer]:
+          - img [ref=e83]
+          - text: Cerrar sesión
+    - generic [ref=e86]:
+      - banner [ref=e87]:
+        - heading "Dashboard" [level=1] [ref=e88]
+        - generic [ref=e89]:
+          - button [ref=e90] [cursor=pointer]:
+            - img [ref=e91]
+          - generic [ref=e94]:
+            - generic [ref=e95]: P
+            - generic [ref=e96]:
+              - paragraph [ref=e97]: Prueba
+              - paragraph [ref=e98]: Superroot
+      - main [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - generic [ref=e102]:
+              - heading "Siniestros / Daños" [level=2] [ref=e103]
+              - paragraph [ref=e104]: 0 registros
+            - button "Nuevo siniestro" [active] [ref=e105] [cursor=pointer]:
+              - img [ref=e106]
+              - text: Nuevo siniestro
+          - generic [ref=e107]:
+            - generic [ref=e108]:
+              - paragraph [ref=e109]: Costo total
+              - paragraph [ref=e110]: $ 0
+            - generic [ref=e111]:
+              - paragraph [ref=e112]: Siniestros
+              - paragraph [ref=e113]: "0"
+            - generic [ref=e114]:
+              - paragraph [ref=e115]: Conductor más costoso
+              - paragraph [ref=e116]: —
+          - generic [ref=e117]:
+            - combobox [ref=e118]:
+              - option "Todos los vehículos" [selected]
+              - option "AAA 1234 — Toyota"
+            - combobox [ref=e119]:
+              - option "Todos los conductores" [selected]
+              - option "Carlos García"
+              - option "María López"
+            - textbox [ref=e120]:
+              - /placeholder: Desde
+            - textbox [ref=e121]:
+              - /placeholder: Hasta
+          - generic [ref=e122]:
+            - img [ref=e124]
+            - heading "Sin siniestros registrados" [level=3] [ref=e126]
+            - paragraph [ref=e127]: Registra el primer siniestro o daño
+            - button "Nuevo siniestro" [ref=e129] [cursor=pointer]:
+              - img [ref=e130]
+              - text: Nuevo siniestro
+          - generic [ref=e134]:
+            - generic [ref=e135]:
+              - heading "Nuevo siniestro / daño" [level=2] [ref=e137]
+              - button [ref=e138] [cursor=pointer]:
+                - img [ref=e139]
+            - generic [ref=e143]:
+              - generic [ref=e144]:
+                - generic [ref=e145]: Vehículo
+                - combobox [ref=e146]:
+                  - option "— Sin vehículo —"
+                  - option "AAA 1234 — Toyota Hilux" [selected]
+              - generic [ref=e147]:
+                - generic [ref=e148]: Conductor
+                - combobox [ref=e149]:
+                  - option "— Sin conductor —"
+                  - option "Carlos García" [selected]
+                  - option "María López"
+              - generic [ref=e151]:
+                - generic [ref=e152]: Fecha del siniestro
+                - textbox "Fecha del siniestro" [ref=e154]: 2026-04-10
+              - generic [ref=e156]:
+                - generic [ref=e157]: Hora
+                - textbox "Hora" [ref=e159]
+              - generic [ref=e161]:
+                - generic [ref=e162]: Costo del daño (UYU)
+                - spinbutton "Costo del daño (UYU)" [ref=e164]
+              - generic [ref=e165]:
+                - generic [ref=e166]: Observaciones
+                - textbox "Descripción del siniestro o daño…" [ref=e167]
+              - generic [ref=e168]:
+                - generic [ref=e169]: Imagen del siniestro
+                - generic [ref=e171] [cursor=pointer]:
+                  - img [ref=e172]
+                  - generic [ref=e176]: Clic para adjuntar imagen (JPG, PNG)
+            - generic [ref=e177]:
+              - button "Cancelar" [ref=e178] [cursor=pointer]
+              - button "Registrar" [ref=e179] [cursor=pointer]
+  - alert [ref=e131]

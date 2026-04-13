@@ -1,0 +1,184 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e6]:
+      - generic [ref=e7]:
+        - img [ref=e9]
+        - generic [ref=e11]: Cuantive
+      - navigation [ref=e12]:
+        - link "Dashboard" [ref=e13] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e14]
+          - generic [ref=e19]: Dashboard
+        - link "Análisis" [ref=e20] [cursor=pointer]:
+          - /url: /dashboard/analytics
+          - img [ref=e21]
+          - generic [ref=e22]: Análisis
+        - link "Vehículos" [ref=e23] [cursor=pointer]:
+          - /url: /dashboard/vehicles
+          - img [ref=e24]
+          - generic [ref=e29]: Vehículos
+        - link "Conductores" [ref=e30] [cursor=pointer]:
+          - /url: /dashboard/drivers
+          - img [ref=e31]
+          - generic [ref=e36]: Conductores
+        - link "Turnos" [ref=e37] [cursor=pointer]:
+          - /url: /dashboard/turnos
+          - img [ref=e38]
+          - generic [ref=e41]: Turnos
+        - link "Repostaje" [ref=e42] [cursor=pointer]:
+          - /url: /dashboard/fuel-loads
+          - img [ref=e43]
+          - generic [ref=e46]: Repostaje
+        - link "Mantenimiento" [ref=e47] [cursor=pointer]:
+          - /url: /dashboard/maintenance
+          - img [ref=e48]
+          - generic [ref=e50]: Mantenimiento
+        - link "Siniestros" [ref=e51] [cursor=pointer]:
+          - /url: /dashboard/siniestros
+          - img [ref=e52]
+          - generic [ref=e54]: Siniestros
+        - link "Satisfacción" [ref=e55] [cursor=pointer]:
+          - /url: /dashboard/satisfaccion
+          - img [ref=e56]
+          - generic [ref=e59]: Satisfacción
+          - img [ref=e60]
+        - link "Alertas" [ref=e62] [cursor=pointer]:
+          - /url: /dashboard/alerts
+          - img [ref=e63]
+          - generic [ref=e66]: Alertas
+        - link "Configuración" [ref=e67] [cursor=pointer]:
+          - /url: /dashboard/settings
+          - img [ref=e68]
+          - generic [ref=e71]: Configuración
+      - generic [ref=e72]:
+        - link "P Prueba admin" [ref=e73] [cursor=pointer]:
+          - /url: /dashboard/profile
+          - generic [ref=e74]: P
+          - generic [ref=e75]:
+            - paragraph [ref=e76]: Prueba
+            - paragraph [ref=e77]: admin
+          - img [ref=e78]
+        - button "Cerrar sesión" [ref=e82] [cursor=pointer]:
+          - img [ref=e83]
+          - text: Cerrar sesión
+    - generic [ref=e86]:
+      - banner [ref=e87]:
+        - heading "Dashboard" [level=1] [ref=e88]
+        - generic [ref=e89]:
+          - button [ref=e90] [cursor=pointer]:
+            - img [ref=e91]
+          - generic [ref=e94]:
+            - generic [ref=e95]: P
+            - generic [ref=e96]:
+              - paragraph [ref=e97]: Prueba
+              - paragraph [ref=e98]: Superroot
+      - main [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - generic [ref=e102]:
+              - heading "Satisfacción" [level=2] [ref=e103]
+              - paragraph [ref=e104]: 0 evaluaciónes registradas
+            - button "Nueva evaluación" [active] [ref=e105] [cursor=pointer]:
+              - img [ref=e106]
+              - text: Nueva evaluación
+          - generic [ref=e107]:
+            - generic [ref=e108]:
+              - generic [ref=e109]:
+                - img [ref=e111]
+                - generic [ref=e113]:
+                  - paragraph [ref=e114]: Satisfacción promedio
+                  - paragraph [ref=e115]: —/10
+              - paragraph [ref=e116]: 0 evaluaciónes en total
+            - generic [ref=e118]:
+              - img [ref=e120]
+              - generic [ref=e123]:
+                - paragraph [ref=e124]: Mejor puntuado
+                - paragraph [ref=e125]: —
+            - generic [ref=e127]:
+              - img [ref=e129]
+              - generic [ref=e132]:
+                - paragraph [ref=e133]: Peor puntuado
+                - paragraph [ref=e134]: —
+          - generic [ref=e135]:
+            - combobox [ref=e137]:
+              - option "Todos los vehículos" [selected]
+              - option "AAA 1234"
+            - textbox [ref=e140]
+            - textbox [ref=e143]
+          - generic [ref=e144]:
+            - img [ref=e146]
+            - heading "Sin evaluaciones" [level=3] [ref=e148]
+            - paragraph [ref=e149]: Agrega la primera evaluación de satisfacción.
+            - button "Nueva evaluación" [ref=e151] [cursor=pointer]:
+              - img [ref=e152]
+              - text: Nueva evaluación
+          - generic [ref=e153]:
+            - heading "Generar QR por vehículo" [level=3] [ref=e154]:
+              - img [ref=e155]
+              - text: Generar QR por vehículo
+            - button "AAA 1234" [ref=e162] [cursor=pointer]:
+              - img [ref=e163]
+              - text: AAA 1234
+          - generic [ref=e172]:
+            - generic [ref=e173]:
+              - heading "Nueva evaluación" [level=2] [ref=e175]
+              - button [ref=e176] [cursor=pointer]:
+                - img [ref=e177]
+            - generic [ref=e181]:
+              - generic [ref=e182]:
+                - generic [ref=e183]: Vehículo *
+                - combobox "Vehículo *" [ref=e184]:
+                  - option "Seleccionar vehículo…" [selected]
+                  - option "AAA 1234"
+              - generic [ref=e185]:
+                - generic [ref=e186]:
+                  - generic [ref=e187]: Fecha
+                  - textbox "Fecha" [ref=e189]: 2026-04-10
+                - generic [ref=e190]:
+                  - generic [ref=e191]: Hora
+                  - textbox "Hora" [ref=e193]
+              - generic [ref=e194]:
+                - generic [ref=e195]: Puntuación (1 = pésimo · 10 = excelente)
+                - generic [ref=e196]:
+                  - generic [ref=e197] [cursor=pointer]:
+                    - radio "1" [ref=e198]
+                    - generic [ref=e199]: "1"
+                  - generic [ref=e200] [cursor=pointer]:
+                    - radio "2" [ref=e201]
+                    - generic [ref=e202]: "2"
+                  - generic [ref=e203] [cursor=pointer]:
+                    - radio "3" [ref=e204]
+                    - generic [ref=e205]: "3"
+                  - generic [ref=e206] [cursor=pointer]:
+                    - radio "4" [ref=e207]
+                    - generic [ref=e208]: "4"
+                  - generic [ref=e209] [cursor=pointer]:
+                    - radio "5" [ref=e210]
+                    - generic [ref=e211]: "5"
+                  - generic [ref=e212] [cursor=pointer]:
+                    - radio "6" [ref=e213]
+                    - generic [ref=e214]: "6"
+                  - generic [ref=e215] [cursor=pointer]:
+                    - radio "7" [ref=e216]
+                    - generic [ref=e217]: "7"
+                  - generic [ref=e218] [cursor=pointer]:
+                    - radio "8" [ref=e219]
+                    - generic [ref=e220]: "8"
+                  - generic [ref=e221] [cursor=pointer]:
+                    - radio "9" [ref=e222]
+                    - generic [ref=e223]: "9"
+                  - generic [ref=e224] [cursor=pointer]:
+                    - radio "10" [ref=e225]
+                    - generic [ref=e226]: "10"
+              - generic [ref=e227]:
+                - generic [ref=e228]: Observaciones
+                - textbox "Comentarios del pasajero o inspector…" [ref=e229]
+              - generic [ref=e230]:
+                - generic [ref=e231]: Foto (opcional)
+                - generic [ref=e233] [cursor=pointer]:
+                  - img [ref=e234]
+                  - generic [ref=e238]: Arrastrá o hacé click para subir
+            - generic [ref=e239]:
+              - button "Cancelar" [ref=e240] [cursor=pointer]
+              - button "Guardar" [ref=e241] [cursor=pointer]
+  - alert [ref=e169]

@@ -1,0 +1,135 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e73]
+  - generic [ref=e74]:
+    - complementary [ref=e75]:
+      - generic [ref=e76]:
+        - img [ref=e78]
+        - generic [ref=e80]: Cuantive
+      - navigation [ref=e81]:
+        - link "Dashboard" [ref=e82] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e83]
+          - generic [ref=e88]: Dashboard
+          - img [ref=e89]
+        - link "Análisis" [ref=e91] [cursor=pointer]:
+          - /url: /dashboard/analytics
+          - img [ref=e92]
+          - generic [ref=e93]: Análisis
+        - link "Vehículos" [ref=e94] [cursor=pointer]:
+          - /url: /dashboard/vehicles
+          - img [ref=e95]
+          - generic [ref=e100]: Vehículos
+        - link "Conductores" [ref=e101] [cursor=pointer]:
+          - /url: /dashboard/drivers
+          - img [ref=e102]
+          - generic [ref=e107]: Conductores
+        - link "Turnos" [ref=e108] [cursor=pointer]:
+          - /url: /dashboard/turnos
+          - img [ref=e109]
+          - generic [ref=e112]: Turnos
+        - link "Repostaje" [ref=e113] [cursor=pointer]:
+          - /url: /dashboard/fuel-loads
+          - img [ref=e114]
+          - generic [ref=e117]: Repostaje
+        - link "Mantenimiento" [ref=e118] [cursor=pointer]:
+          - /url: /dashboard/maintenance
+          - img [ref=e119]
+          - generic [ref=e121]: Mantenimiento
+        - link "Siniestros" [ref=e122] [cursor=pointer]:
+          - /url: /dashboard/siniestros
+          - img [ref=e123]
+          - generic [ref=e125]: Siniestros
+        - link "Satisfacción" [ref=e126] [cursor=pointer]:
+          - /url: /dashboard/satisfaccion
+          - img [ref=e127]
+          - generic [ref=e130]: Satisfacción
+        - link "Alertas" [ref=e131] [cursor=pointer]:
+          - /url: /dashboard/alerts
+          - img [ref=e132]
+          - generic [ref=e135]: Alertas
+        - link "Configuración" [ref=e136] [cursor=pointer]:
+          - /url: /dashboard/settings
+          - img [ref=e137]
+          - generic [ref=e140]: Configuración
+      - generic [ref=e141]:
+        - link "P Prueba admin" [ref=e142] [cursor=pointer]:
+          - /url: /dashboard/profile
+          - generic [ref=e143]: P
+          - generic [ref=e144]:
+            - paragraph [ref=e145]: Prueba
+            - paragraph [ref=e146]: admin
+          - img [ref=e147]
+        - button "Cerrar sesión" [ref=e151] [cursor=pointer]:
+          - img [ref=e152]
+          - text: Cerrar sesión
+    - generic [ref=e155]:
+      - banner [ref=e156]:
+        - heading "Dashboard" [level=1] [ref=e157]
+        - generic [ref=e158]:
+          - button [ref=e159] [cursor=pointer]:
+            - img [ref=e160]
+          - generic [ref=e163]:
+            - generic [ref=e164]: P
+            - generic [ref=e165]:
+              - paragraph [ref=e166]: Prueba
+              - paragraph [ref=e167]: PruebaAutomation
+      - main [ref=e168]:
+        - generic [ref=e169]:
+          - generic [ref=e170]:
+            - generic [ref=e171]:
+              - heading "Panel de control" [level=2] [ref=e172]
+              - paragraph [ref=e173]: abril de 2026
+            - generic [ref=e174]:
+              - button "Vehículos" [ref=e175] [cursor=pointer]:
+                - img [ref=e176]
+                - text: Vehículos
+              - button "Conductores" [ref=e181] [cursor=pointer]:
+                - img [ref=e182]
+                - text: Conductores
+            - textbox [ref=e187]: 2026-04
+            - generic [ref=e188]:
+              - combobox [ref=e189]:
+                - option "Todos los vehículos" [selected]
+              - img
+            - button "Descargar CSV" [ref=e190] [cursor=pointer]:
+              - img [ref=e191]
+              - text: Descargar CSV
+          - generic [ref=e194]:
+            - generic [ref=e195]:
+              - img [ref=e197]
+              - generic [ref=e202]:
+                - paragraph [ref=e203]: Total vehículos
+                - paragraph [ref=e204]: 0vehículos
+            - generic [ref=e205]:
+              - img [ref=e207]
+              - generic [ref=e209]:
+                - paragraph [ref=e210]: Gasto total
+                - paragraph [ref=e211]: $ 0
+            - generic [ref=e212]:
+              - img [ref=e214]
+              - generic [ref=e217]:
+                - paragraph [ref=e218]: Gasto combustible
+                - paragraph [ref=e219]: $ 0
+            - generic [ref=e220]:
+              - img [ref=e222]
+              - generic [ref=e224]:
+                - paragraph [ref=e225]: Gasto mantenimiento
+                - paragraph [ref=e226]: $ 0
+            - generic [ref=e227]:
+              - img [ref=e229]
+              - generic [ref=e233]:
+                - paragraph [ref=e234]: KM recorridos
+                - paragraph [ref=e235]: 0km
+            - generic [ref=e236]:
+              - img [ref=e238]
+              - generic [ref=e241]:
+                - paragraph [ref=e242]: Rendimiento promedio
+                - paragraph [ref=e243]: —
+          - generic [ref=e244]:
+            - generic [ref=e246]:
+              - heading "Detalle por vehículo" [level=3] [ref=e247]
+              - paragraph [ref=e248]: abril de 2026
+            - generic [ref=e249]:
+              - img [ref=e250]
+              - paragraph [ref=e253]: Sin registros en el período
+              - paragraph [ref=e254]: Prueba seleccionando otro mes o cambiando el filtro

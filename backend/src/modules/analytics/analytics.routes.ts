@@ -144,6 +144,21 @@ router.get('/vehicle/:vehicleId/costs', analyticsController.vehicleCosts.bind(an
 router.get('/documents-expiring', analyticsController.documentsExpiring.bind(analyticsController));
 
 /**
+ * GET /api/analytics/drivers-siniestro-ranking?from=2026-01-01&to=2026-03-31
+ *
+ * Ranking de conductores por costo total acumulado en siniestros/daños.
+ * Ordenado de mayor a menor costo total.
+ *
+ * Respuesta por conductor:
+ *   position   — posición en el ranking (1 = mayor costo)
+ *   driverId   — UUID del conductor
+ *   driver     — nombre completo
+ *   totalCost  — suma de costos en UYU
+ *   totalCount — cantidad de siniestros registrados
+ */
+router.get('/drivers-siniestro-ranking', analyticsController.driversSiniestroRanking.bind(analyticsController));
+
+/**
  * GET /api/analytics/kpi-dashboard?month=YYYY-MM
  *
  * Carga todos los KPIs del analytics_engine en una sola petición:

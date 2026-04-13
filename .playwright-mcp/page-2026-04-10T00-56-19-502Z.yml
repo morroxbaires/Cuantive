@@ -1,0 +1,129 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e6]:
+      - generic [ref=e7]:
+        - img [ref=e9]
+        - generic [ref=e11]: Cuantive
+      - navigation [ref=e12]:
+        - link "Dashboard" [ref=e13] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e14]
+          - generic [ref=e19]: Dashboard
+        - link "Análisis" [ref=e20] [cursor=pointer]:
+          - /url: /dashboard/analytics
+          - img [ref=e21]
+          - generic [ref=e22]: Análisis
+        - link "Vehículos" [ref=e23] [cursor=pointer]:
+          - /url: /dashboard/vehicles
+          - img [ref=e24]
+          - generic [ref=e29]: Vehículos
+          - img [ref=e30]
+        - link "Conductores" [ref=e32] [cursor=pointer]:
+          - /url: /dashboard/drivers
+          - img [ref=e33]
+          - generic [ref=e38]: Conductores
+        - link "Turnos" [ref=e39] [cursor=pointer]:
+          - /url: /dashboard/turnos
+          - img [ref=e40]
+          - generic [ref=e43]: Turnos
+        - link "Repostaje" [ref=e44] [cursor=pointer]:
+          - /url: /dashboard/fuel-loads
+          - img [ref=e45]
+          - generic [ref=e48]: Repostaje
+        - link "Mantenimiento" [ref=e49] [cursor=pointer]:
+          - /url: /dashboard/maintenance
+          - img [ref=e50]
+          - generic [ref=e52]: Mantenimiento
+        - link "Siniestros" [ref=e53] [cursor=pointer]:
+          - /url: /dashboard/siniestros
+          - img [ref=e54]
+          - generic [ref=e56]: Siniestros
+        - link "Satisfacción" [ref=e57] [cursor=pointer]:
+          - /url: /dashboard/satisfaccion
+          - img [ref=e58]
+          - generic [ref=e61]: Satisfacción
+        - link "Alertas" [ref=e62] [cursor=pointer]:
+          - /url: /dashboard/alerts
+          - img [ref=e63]
+          - generic [ref=e66]: Alertas
+        - link "Configuración" [ref=e67] [cursor=pointer]:
+          - /url: /dashboard/settings
+          - img [ref=e68]
+          - generic [ref=e71]: Configuración
+      - generic [ref=e72]:
+        - link "P Prueba admin" [ref=e73] [cursor=pointer]:
+          - /url: /dashboard/profile
+          - generic [ref=e74]: P
+          - generic [ref=e75]:
+            - paragraph [ref=e76]: Prueba
+            - paragraph [ref=e77]: admin
+          - img [ref=e78]
+        - button "Cerrar sesión" [ref=e82] [cursor=pointer]:
+          - img [ref=e83]
+          - text: Cerrar sesión
+    - generic [ref=e86]:
+      - banner [ref=e87]:
+        - heading "Vehículos" [level=1] [ref=e88]
+        - generic [ref=e89]:
+          - button [ref=e90] [cursor=pointer]:
+            - img [ref=e91]
+          - generic [ref=e94]:
+            - generic [ref=e95]: P
+            - generic [ref=e96]:
+              - paragraph [ref=e97]: Prueba
+              - paragraph [ref=e98]: Superroot
+      - main [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - generic [ref=e102]:
+              - heading "Vehículos" [level=2] [ref=e103]
+              - paragraph [ref=e104]: 1 vehículo en flota
+            - button "Nuevo vehículo" [ref=e105] [cursor=pointer]:
+              - img [ref=e106]
+              - text: Nuevo vehículo
+          - generic [ref=e107]:
+            - generic [ref=e108]:
+              - img
+              - textbox "Buscar por patente, marca, modelo…" [ref=e109]
+            - combobox [ref=e110]:
+              - option "Todos los tipos" [selected]
+              - option "Automóvil"
+              - option "Camioneta"
+              - option "Camión"
+              - option "Taxi"
+          - table [ref=e528]:
+            - rowgroup [ref=e529]:
+              - row "Patente Vehículo Tipo Odómetro Rendimiento esperado Conductores Estado" [ref=e530]:
+                - columnheader "Patente" [ref=e531]
+                - columnheader "Vehículo" [ref=e532]
+                - columnheader "Tipo" [ref=e533]
+                - columnheader "Odómetro" [ref=e534]
+                - columnheader "Rendimiento esperado" [ref=e535]
+                - columnheader "Conductores" [ref=e536]
+                - columnheader "Estado" [ref=e537]
+                - columnheader [ref=e538]
+            - rowgroup [ref=e539]:
+              - row "AAA 1234 Toyota Hilux (2022) Camioneta 46.500 km 12 km/L — Activo" [ref=e540]:
+                - cell "AAA 1234" [ref=e541]
+                - cell "Toyota Hilux (2022)" [ref=e542]:
+                  - generic [ref=e543]:
+                    - text: Toyota Hilux
+                    - generic [ref=e544]: (2022)
+                - cell "Camioneta" [ref=e545]:
+                  - generic [ref=e546]: Camioneta
+                - cell "46.500 km" [ref=e547]:
+                  - generic [ref=e548]: 46.500 km
+                - cell "12 km/L" [ref=e549]:
+                  - generic [ref=e550]: 12 km/L
+                - cell "—" [ref=e551]
+                - cell "Activo" [ref=e552]:
+                  - generic [ref=e553]: Activo
+                - cell [ref=e555]:
+                  - generic [ref=e556]:
+                    - button [ref=e557] [cursor=pointer]:
+                      - img [ref=e558]
+                    - button [ref=e561] [cursor=pointer]:
+                      - img [ref=e562]
+                    - button [ref=e565] [cursor=pointer]:
+                      - img [ref=e566]
+  - alert [ref=e123]

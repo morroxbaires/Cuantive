@@ -20,7 +20,7 @@ import { Card, CardHeader } from '@/components/ui/Card';
 import { EmptyState }      from '@/components/ui/EmptyState';
 import { PageLoader }      from '@/components/ui/Spinner';
 import { Tooltip, InfoIcon } from '@/components/ui/Tooltip';
-import { formatDate, formatNumber, debounce } from '@/lib/utils';
+import { formatDate, formatNumber, debounce, daysUntil } from '@/lib/utils';
 import type { Turno, TurnoStats, Vehicle, Driver } from '@/types';
 import type { TurnoPayload } from '@/services/turnos.service';
 
@@ -158,7 +158,7 @@ export default function TurnosPage() {
 
   // ─── Vehicle / Driver labels ─────────────────────────────────────────────
   const vehicleLabel = (v: Vehicle) => `${v.plate} — ${v.brand ?? ''} ${v.model ?? ''}`.trim();
-  const driverLabel  = (d: Driver)  => `${d.name} ${d.lastname}`;
+  const driverLabel  = (d: Driver)  => `${d.name} ${d.lastname}${d.licenseExpiry && daysUntil(d.licenseExpiry) < 0 ? ' ⚠ Licencia vencida' : ''}`;
 
   return (
     <div className="space-y-5 animate-fade-in">

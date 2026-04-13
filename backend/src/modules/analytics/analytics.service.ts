@@ -37,16 +37,17 @@ export interface ConsumptionRow {
 }
 
 export interface VehicleCostRow {
-  vehicleId:       string;
-  plate:           string;
-  vehicleName:     string;
-  totalFuelCost:   number;
-  totalMaintCost:  number;
-  totalCost:       number;
-  totalLiters:     number;
-  totalKm:         number;
-  costPerKm:       number | null;
-  avgKmPerUnit:    number | null;
+  vehicleId:           string;
+  plate:               string;
+  vehicleName:         string;
+  totalFuelCost:       number;
+  totalMaintCost:      number;
+  totalSiniestrosCost: number;
+  totalCost:           number;
+  totalLiters:         number;
+  totalKm:             number;
+  costPerKm:           number | null;
+  avgKmPerUnit:        number | null;
 }
 
 // Ficha enriquecida de costos para un único vehículo
@@ -388,6 +389,7 @@ export class AnalyticsService {
       vehicleCounts,
       fuelAgg,
       maintAgg,
+      siniestroAgg,
       anomalyVehiclesRes,
       anomalyDriversRes,
       upcomingMaintenanceRes,
@@ -419,6 +421,16 @@ export class AnalyticsService {
           ...(vehicleId ? { vehicleId } : {}),
         },
         _sum: { cost: true },
+      }),
+
+      // Siniestros
+      prisma.siniestro.aggregate({
+        where: {
+          companyId,
+          fecha: { gte: fromDate, lte: toDate },
+          ...(vehicleId ? { vehicleId } : {}),
+        },
+        _sum: { costo: true },
       }),
 
       // Vehículos con anomalía de consumo
@@ -501,6 +513,7 @@ export class AnalyticsService {
     const activeVehicles = vehicleCounts.find(r => r.active)?._count.id ?? 0;
     const totalFuelCost  = Number(fuelAgg._sum.priceTotal  ?? 0);
     const totalMaintCost = Number(maintAgg._sum.cost        ?? 0);
+    const totalSiniestrosCost = Number(siniestroAgg._sum.costo ?? 0);
     const totalLiters    = Number(fuelAgg._sum.litersOrKwh  ?? 0);
 
     return {
@@ -508,7 +521,7 @@ export class AnalyticsService {
       activeVehicles,
       totalFuelCost,
       totalMaintCost,
-      totalCost:         totalFuelCost + totalMaintCost,
+      totalCost:         totalFuelCost + totalMaintCost + totalSiniestrosCost,
       totalLiters,
       fleetAvgKmPerUnit: Number(fuelAgg._avg.kmPerUnit ?? 0) || null,
       anomalyVehicles:   Number(anomalyVehiclesRes[0]?.cnt ?? 0),
@@ -666,15 +679,16 @@ export class AnalyticsService {
     const { fromDate, toDate } = dateRange(range.from, range.to);
 
     const rows = await prisma.$queryRawUnsafe<{
-      vehicleId:      string;
-      plate:          string;
-      vehicleName:    string;
-      totalFuelCost:  string;
-      totalMaintCost: string;
-      totalLiters:    string;
-      totalKm:        string | null;
-      costPerKm:      string | null;
-      avgKmPerUnit:   string | null;
+      vehicleId:           string;
+      plate:               string;
+      vehicleName:         string;
+      totalFuelCost:       string;
+      totalMaintCost:      string;
+      totalSiniestrosCost: string;
+      totalLiters:         string;
+      totalKm:             string | null;
+      costPerKm:           string | null;
+      avgKmPerUnit:        string | null;
     }[]>(`
       SELECT
         v.id                                          AS vehicleId,
@@ -682,6 +696,7 @@ export class AnalyticsService {
         COALESCE(v.name, v.plate)                     AS vehicleName,
         ROUND(COALESCE(SUM(fl.price_total),     0), 2) AS totalFuelCost,
         ROUND(COALESCE(SUM(m.cost),             0), 2) AS totalMaintCost,
+        ROUND(COALESCE(SUM(s.costo),            0), 2) AS totalSiniestrosCost,
         ROUND(COALESCE(SUM(fl.liters_or_kwh),   0), 2) AS totalLiters,
         CASE
           WHEN MAX(fl.odometer) IS NOT NULL
@@ -707,26 +722,30 @@ export class AnalyticsService {
       LEFT JOIN maintenance m
              ON m.vehicle_id = v.id
             AND m.date BETWEEN ? AND ?
+      LEFT JOIN siniestros s
+             ON s.vehicle_id = v.id
+            AND s.fecha BETWEEN ? AND ?
       WHERE v.company_id  = ?
         AND v.deleted_at IS NULL
         AND v.active      = 1
         ${vehicleId ? 'AND v.id = ?' : ''}
       GROUP BY v.id, v.plate, v.name
-      HAVING totalFuelCost > 0 OR totalMaintCost > 0
-      ORDER BY totalFuelCost DESC
-    `, fromDate, toDate, fromDate, toDate, companyId, ...(vehicleId ? [vehicleId] : []));
+      HAVING totalFuelCost > 0 OR totalMaintCost > 0 OR totalSiniestrosCost > 0
+      ORDER BY (totalFuelCost + totalMaintCost + totalSiniestrosCost) DESC
+    `, fromDate, toDate, fromDate, toDate, fromDate, toDate, companyId, ...(vehicleId ? [vehicleId] : []));
 
     return rows.map(r => ({
-      vehicleId:      r.vehicleId,
-      plate:          r.plate,
-      vehicleName:    r.vehicleName,
-      totalFuelCost:  Number(r.totalFuelCost),
-      totalMaintCost: Number(r.totalMaintCost),
-      totalCost:      Number(r.totalFuelCost) + Number(r.totalMaintCost),
-      totalLiters:    Number(r.totalLiters),
-      totalKm:        r.totalKm !== null ? Number(r.totalKm) : 0,
-      costPerKm:      r.costPerKm !== null ? Number(r.costPerKm) : null,
-      avgKmPerUnit:   r.avgKmPerUnit !== null ? Number(r.avgKmPerUnit) : null,
+      vehicleId:           r.vehicleId,
+      plate:               r.plate,
+      vehicleName:         r.vehicleName,
+      totalFuelCost:       Number(r.totalFuelCost),
+      totalMaintCost:      Number(r.totalMaintCost),
+      totalSiniestrosCost: Number(r.totalSiniestrosCost),
+      totalCost:           Number(r.totalFuelCost) + Number(r.totalMaintCost) + Number(r.totalSiniestrosCost),
+      totalLiters:         Number(r.totalLiters),
+      totalKm:             r.totalKm !== null ? Number(r.totalKm) : 0,
+      costPerKm:           r.costPerKm !== null ? Number(r.costPerKm) : null,
+      avgKmPerUnit:        r.avgKmPerUnit !== null ? Number(r.avgKmPerUnit) : null,
     }));
   }
 
@@ -1786,6 +1805,49 @@ export class AnalyticsService {
       fuelTrend,
       irregularLoads,
     };
+  }
+
+  // ── 12. Ranking de conductores por costo de siniestros ─────────────────────
+
+  async getDriversSiniestroRanking(
+    companyId: string,
+    range: DateRange,
+  ): Promise<{
+    position:    number;
+    driverId:    string;
+    driver:      string;
+    totalCost:   number;
+    totalCount:  number;
+  }[]> {
+    const { fromDate, toDate } = dateRange(range.from, range.to);
+
+    const rows = await prisma.$queryRawUnsafe<{
+      driverId:   string;
+      driver:     string;
+      totalCost:  string;
+      totalCount: string | number;
+    }[]>(`
+      SELECT
+        d.id                                        AS driverId,
+        CONCAT(d.name, ' ', d.lastname)             AS driver,
+        ROUND(COALESCE(SUM(s.costo), 0), 2)         AS totalCost,
+        COUNT(s.id)                                 AS totalCount
+      FROM siniestros s
+      JOIN drivers d ON d.id = s.driver_id
+      WHERE s.company_id = ?
+        AND s.fecha BETWEEN ? AND ?
+        AND d.deleted_at IS NULL
+      GROUP BY d.id, d.name, d.lastname
+      ORDER BY totalCost DESC
+    `, companyId, fromDate, toDate);
+
+    return rows.map((r, idx) => ({
+      position:   idx + 1,
+      driverId:   r.driverId,
+      driver:     r.driver,
+      totalCost:  Number(r.totalCost),
+      totalCount: Number(r.totalCount),
+    }));
   }
 
   // ── Documents Expiring ──────────────────────────────────────────────────────

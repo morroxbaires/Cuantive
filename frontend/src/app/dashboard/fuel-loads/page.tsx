@@ -18,9 +18,9 @@ import { Input }           from '@/components/ui/Input';
 import { Select }          from '@/components/ui/Select';
 import { EmptyState }      from '@/components/ui/EmptyState';
 import { PageLoader }      from '@/components/ui/Spinner';
-import type { FuelLoad, Vehicle, Driver, Settings } from '@/types';
+import type { FuelLoad, Vehicle, Driver, Settings, FuelStats } from '@/types';
 import { FuelLoadPayload } from '@/services/fuel-loads.service';
-import { formatDate, formatCurrency, formatNumber } from '@/lib/utils';
+import { formatDate, formatCurrency, formatNumber, formatUnitPrice, daysUntil } from '@/lib/utils';
 import { Tooltip, InfoIcon } from '@/components/ui/Tooltip';
 
 const schema = z.object({
@@ -35,6 +35,74 @@ const schema = z.object({
   notes:       z.string().optional(),
 });
 type FormValues = z.infer<typeof schema>;
+
+// ─── Stats row component ──────────────────────────────────────────────────────
+
+function FuelStatsRow({ stats }: { stats: FuelStats }) {
+  const hasFuel    = (stats.totalLitersFuel    ?? 0) > 0;
+  const hasElec    = (stats.totalKwhElec       ?? 0) > 0;
+  const hasFuelEff = (stats.avgKmPerLiterFuel  ?? 0) > 0;
+  const hasElecEff = (stats.avgKmPerKwhElec    ?? 0) > 0;
+
+  const items: { label: string; value: string; tip?: string }[] = [
+    {
+      label: 'Costo total',
+      value: formatCurrency(stats.totalCost),
+      tip: 'Suma de (litros × precio/unidad) de todas las cargas en el período y filtros activos.',
+    },
+    ...(hasFuel ? [{
+      label: hasFuel && hasElec ? 'Consumo combustible' : 'Consumo total',
+      value: `${formatNumber(stats.totalLitersFuel, 0)} L`,
+      tip: 'Suma de litros (nafta/gasoil) de todas las cargas filtradas.',
+    }] : []),
+    ...(hasElec ? [{
+      label: hasFuel && hasElec ? 'Consumo eléctrico' : 'Consumo total',
+      value: `${formatNumber(stats.totalKwhElec, 0)} kWh`,
+      tip: 'Suma de kWh de todas las cargas de vehículos eléctricos filtradas.',
+    }] : []),
+    ...(!hasFuel && !hasElec ? [{
+      label: 'Consumo total',
+      value: `${formatNumber(stats.totalLiters, 0)} L`,
+      tip: 'Suma de litros o kWh de todas las cargas filtradas.',
+    }] : []),
+    ...(hasFuelEff ? [{
+      label: hasFuelEff && hasElecEff ? 'Rendimiento km/L' : 'Promedio km/L',
+      value: `${formatNumber(stats.avgKmPerLiterFuel)} km/L`,
+      tip: 'Promedio de km/L de las cargas de nafta/gasoil con odómetro registrado.',
+    }] : []),
+    ...(hasElecEff ? [{
+      label: hasFuelEff && hasElecEff ? 'Rendimiento km/kWh' : 'Promedio km/kWh',
+      value: `${formatNumber(stats.avgKmPerKwhElec)} km/kWh`,
+      tip: 'Promedio de km/kWh de las cargas de vehículos eléctricos con odómetro registrado.',
+    }] : []),
+    ...(!hasFuelEff && !hasElecEff && stats.avgKmPerLiter > 0 ? [{
+      label: 'Promedio km/unidad',
+      value: `${formatNumber(stats.avgKmPerLiter)} km/u`,
+      tip: 'Promedio del campo km/unidad de todas las cargas del período.',
+    }] : []),
+    { label: 'Cargas', value: String(stats.loadsCount) },
+  ];
+
+  return (
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {items.map(({ label, value, tip }) => (
+        <div key={label} className="rounded-xl bg-white border border-slate-100 shadow-card px-4 py-3">
+          {tip ? (
+            <Tooltip text={tip}>
+              <p className="text-xs text-slate-500">{label}</p>
+              <InfoIcon />
+            </Tooltip>
+          ) : (
+            <p className="text-xs text-slate-500">{label}</p>
+          )}
+          <p className="mt-0.5 text-base font-bold text-slate-900">{value}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function FuelLoadsPage() {
   const { loads, total, totalPages, stats, fuelTypes, loading, filters, setFilters, create, update, remove } = useFuelLoads();
@@ -152,7 +220,7 @@ export default function FuelLoadsPage() {
         >
           <option value="">Todos los conductores</option>
           {drivers.map((d) => (
-            <option key={d.id} value={d.id}>{d.name} {d.lastname}</option>
+            <option key={d.id} value={d.id}>{d.name} {d.lastname}{d.licenseExpiry && daysUntil(d.licenseExpiry) < 0 ? ' ⚠ Licencia vencida' : ''}</option>
           ))}
         </select>
         {(filters.vehicleId || filters.driverId) && (
@@ -166,40 +234,7 @@ export default function FuelLoadsPage() {
       </div>
 
       {/* Stats mini row */}
-      {stats && (
-        <div className="grid gap-3 sm:grid-cols-4">
-          {[
-            {
-              label: 'Costo total',
-              value: formatCurrency(stats.totalCost),
-              tip:   'Suma de (litros × precio/unidad) de todas las cargas en el período y filtros activos.',
-            },
-            {
-              label: 'Consumo total',
-              value: `${formatNumber(stats.totalLiters, 0)} L/kWh`,
-              tip:   'Suma de litros (combustible) o kWh (eléctrico) de todas las cargas filtradas.',
-            },
-            {
-              label: 'Promedio km/L',
-              value: `${formatNumber(stats.avgKmPerLiter)} km/L`,
-              tip:   'Promedio del campo km/unidad de todas las cargas del período. Cada carga calcula: (odómetro_actual − odómetro_carga_previa) ÷ litros_cargados. Solo incluye cargas con odómetro registrado.',
-            },
-            { label: 'Cargas', value: String(stats.loadsCount) },
-          ].map(({ label, value, tip }) => (
-            <div key={label} className="rounded-xl bg-white border border-slate-100 shadow-card px-4 py-3">
-              {tip ? (
-                <Tooltip text={tip}>
-                  <p className="text-xs text-slate-500">{label}</p>
-                  <InfoIcon />
-                </Tooltip>
-              ) : (
-                <p className="text-xs text-slate-500">{label}</p>
-              )}
-              <p className="mt-0.5 text-base font-bold text-slate-900">{value}</p>
-            </div>
-          ))}
-        </div>
-      )}
+      {stats && <FuelStatsRow stats={stats} />}
 
       {loading ? <PageLoader /> : loads.length === 0 ? (
         <EmptyState icon={Fuel} title="Sin repostajes registrados" description="Registra el primer repostaje" action={<Button icon={<Plus className="h-4 w-4" />} onClick={openCreate}>Nuevo repostaje</Button>} />
@@ -228,7 +263,7 @@ export default function FuelLoadsPage() {
             }},
             { key: 'unitPrice', label: 'Precio/unidad', render: (row) => {
               const fl = row as unknown as FuelLoad;
-              return fl.unitPrice ? formatCurrency(Number(fl.unitPrice)) : '—';
+              return fl.unitPrice ? formatUnitPrice(Number(fl.unitPrice)) : '—';
             }},
             { key: 'priceTotal', label: 'Total', render: (row) => {
               const fl = row as unknown as FuelLoad;
@@ -236,32 +271,48 @@ export default function FuelLoadsPage() {
             }},
             { key: 'kmPerUnit', label: 'Rendimiento', render: (row) => {
               const fl = row as unknown as FuelLoad;
-              if (!fl.kmPerUnit) return <span className="text-slate-400">—</span>;
+
+              const unit = fl.fuelType?.unit === 'kwh' ? 'kWh' : 'L';
+
+              if (!fl.kmPerUnit) {
+                const reason = fl.odometer == null
+                  ? 'Sin odómetro registrado en esta carga.'
+                  : `Primer repostaje del vehículo con odómetro. Se necesita al menos una carga previa para calcular km/${unit}.`;
+                return (
+                  <Tooltip text={reason} position="top">
+                    <span className="text-slate-400 cursor-default underline decoration-dotted decoration-slate-300">—</span>
+                  </Tooltip>
+                );
+              }
 
               const kmNum = Number(fl.kmPerUnit);
               const ref   = fl.vehicle?.efficiencyReference != null ? Number(fl.vehicle.efficiencyReference) : null;
-              const unit  = fl.fuelType?.unit === 'kwh' ? 'kWh' : 'L';
               const kmVal = `${formatNumber(kmNum, 2)} km/${unit}`;
 
               if (!ref) {
                 return (
-                  <span className="text-sm font-medium text-slate-600">{kmVal}</span>
+                  <Tooltip text={`Rendimiento: ${kmVal}. Sin referencia configurada para comparar.`} position="top">
+                    <span className="text-sm font-medium text-slate-600">{kmVal}</span>
+                  </Tooltip>
                 );
               }
 
+              // Comparación porcentual — consistente con el motor de analytics
+              // ≥10µ% = Óptimo, ≥85% = Esperado, <85% = EXCESO
+              const pct = (kmNum / ref) * 100;
               let variant: 'success' | 'info' | 'danger';
               let label: string;
-              if (kmNum > ref + 2) {
+              if (pct >= 105) {
                 variant = 'success'; label = 'Óptimo';
-              } else if (kmNum >= ref - 2) {
+              } else if (pct >= 85) {
                 variant = 'info'; label = 'Esperado';
               } else {
-                variant = 'danger'; label = 'EXCESO';
+                variant = 'danger'; label = 'ALTO CONSUMO';
               }
 
               return (
                 <Tooltip
-                  text={`Rendimiento: ${kmVal} — Referencia: ${ref} km/${unit} (±2 margen)`}
+                  text={`Rendimiento: ${kmVal} — Referencia: ${formatNumber(ref, 2)} km/${unit} — ${formatNumber(pct, 1)}% del valor esperado`}
                   position="top"
                 >
                   <div className="flex items-center gap-1.5">
@@ -330,8 +381,7 @@ export default function FuelLoadsPage() {
             step="0.0001"
             placeholder="0.00"
             required
-            readOnly
-            hint="Precio configurado en Configuración → Precios de referencia"
+            hint="Precio precargado desde Configuración. Podés modificarlo si el valor es distinto."
             error={errors.unitPrice?.message}
             {...register('unitPrice')}
           />

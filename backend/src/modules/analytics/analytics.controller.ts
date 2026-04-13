@@ -210,6 +210,21 @@ export class AnalyticsController {
   }
 
   /**
+   * GET /api/analytics/drivers-siniestro-ranking
+   * Query params: from, to (ISO date strings; defaults últimos 90 días)
+   * Retorna conductores ordenados por costo total de siniestros DESC.
+   */
+  async driversSiniestroRanking(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await analyticsService.getDriversSiniestroRanking(
+        req.tenantId,
+        extractRange(req),
+      );
+      sendSuccess(res, data, 'Ranking de conductores por siniestros');
+    } catch (e) { next(e); }
+  }
+
+  /**
    * GET /api/analytics/kpi-dashboard?month=YYYY-MM
    *
    * Carga todos los KPIs del analytics_engine en una sola petición.

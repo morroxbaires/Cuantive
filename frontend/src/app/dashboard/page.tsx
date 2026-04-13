@@ -1,13 +1,14 @@
 ﻿'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import { Truck, Users, Gauge, Fuel, Route, ChevronDown, Wrench, DollarSign } from 'lucide-react';
+import { Truck, Users, Gauge, Fuel, Route, ChevronDown, Wrench, DollarSign, Download } from 'lucide-react';
 import { PageLoader } from '@/components/ui/Spinner';
 import { fuelLoadsService }   from '@/services/fuel-loads.service';
 import { maintenanceService } from '@/services/maintenance.service';
 import { vehiclesService }    from '@/services/vehicles.service';
 import { driversService }     from '@/services/drivers.service';
 import { formatNumber, formatCurrency, cn } from '@/lib/utils';
+import { useAuth } from '@/contexts/AuthContext';
 import type { Vehicle, Driver, FuelLoad, Maintenance } from '@/types';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -32,12 +33,16 @@ interface EntityStats {
   id:                string;
   label:             string;
   totalLoads:        number;
-  totalLiters:       number;
-  totalKm:           number;
+  totalLitersFuel:   number;     // litros (nafta/gasoil)
+  totalKwhElec:      number;     // kWh (electric)
+  totalKm:           number;     // combined km estimate
+  kmFuelAccum:       number;     // Σ(kmPerUnit × liters) fuel
+  kmElecAccum:       number;     // Σ(kmPerUnit × kWh) electric
   fuelCost:          number;
   maintenanceCost:   number;
   maintenanceCount:  number;
-  avgKmPerLiter:     number | null;
+  avgKmPerLiter:     number | null;   // km/L (fuel only)
+  avgKmPerKwh:       number | null;   // km/kWh (electric only)
 }
 
 function aggregateStats(
@@ -48,8 +53,10 @@ function aggregateStats(
   const map = new Map<string, EntityStats>();
 
   const blank = (id: string, label: string): EntityStats => ({
-    id, label, totalLoads: 0, totalLiters: 0, totalKm: 0,
-    fuelCost: 0, maintenanceCost: 0, maintenanceCount: 0, avgKmPerLiter: null,
+    id, label, totalLoads: 0, totalLitersFuel: 0, totalKwhElec: 0, totalKm: 0,
+    kmFuelAccum: 0, kmElecAccum: 0,
+    fuelCost: 0, maintenanceCost: 0, maintenanceCount: 0,
+    avgKmPerLiter: null, avgKmPerKwh: null,
   });
 
   // Aggregate fuel loads
@@ -69,8 +76,15 @@ function aggregateStats(
     const s      = map.get(id)!;
     const liters = Number(load.litersOrKwh ?? 0);
     const kmPerU = load.kmPerUnit != null ? Number(load.kmPerUnit) : null;
+    const isElec = load.fuelType?.unit === 'kwh';
     s.totalLoads++;
-    s.totalLiters += liters;
+    if (isElec) {
+      s.totalKwhElec += liters;
+      if (kmPerU != null) s.kmElecAccum += kmPerU * liters;
+    } else {
+      s.totalLitersFuel += liters;
+      if (kmPerU != null) s.kmFuelAccum += kmPerU * liters;
+    }
     if (kmPerU != null) s.totalKm += kmPerU * liters;
     s.fuelCost += load.priceTotal != null ? Number(load.priceTotal) : 0;
   }
@@ -88,7 +102,8 @@ function aggregateStats(
   }
 
   for (const s of map.values()) {
-    s.avgKmPerLiter = s.totalKm > 0 && s.totalLiters > 0 ? s.totalKm / s.totalLiters : null;
+    s.avgKmPerLiter = s.kmFuelAccum > 0 && s.totalLitersFuel > 0 ? s.kmFuelAccum / s.totalLitersFuel : null;
+    s.avgKmPerKwh   = s.kmElecAccum > 0 && s.totalKwhElec > 0   ? s.kmElecAccum / s.totalKwhElec   : null;
   }
 
   return Array.from(map.values()).sort((a, b) => (b.fuelCost + b.maintenanceCost) - (a.fuelCost + a.maintenanceCost));
@@ -110,8 +125,7 @@ function SummaryCard({
       <div className="min-w-0">
         <p className="text-xs text-slate-500 uppercase font-medium tracking-wide truncate">{title}</p>
         <p className="text-xl font-bold text-slate-900 mt-0.5">
-          {value}
-          {unit && <span className="text-sm font-medium text-slate-400 ml-1">{unit}</span>}
+          {value}{unit && <span className="text-sm font-medium text-slate-400 ml-1">{' '}{unit}</span>}
         </p>
       </div>
     </div>
@@ -121,6 +135,7 @@ function SummaryCard({
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 export default function DashboardPage() {
+  const { user } = useAuth();
   // catalogue state (loaded once)
   const [vehicleList,    setVehicleList]    = useState<Vehicle[]>([]);
   const [driverList,     setDriverList]     = useState<Driver[]>([]);
@@ -188,6 +203,39 @@ export default function DashboardPage() {
     setEntityId('');
   };
 
+  const downloadCSV = () => {
+    const esc = (v: string | number | null | undefined) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+    const isVehicles = mode === 'vehicles';
+    const headers = isVehicles
+      ? ['Vehículo', 'Repostajes', 'Litros', 'kWh', 'Gasto Combust.', 'Cant. Mant.', 'Gasto Mant.', 'Gasto Total', 'KM Recorridos', 'Km/L', 'Km/kWh']
+      : ['Conductor', 'Repostajes', 'Litros', 'kWh', 'Gasto Combust.', 'Gasto Total', 'KM Recorridos', 'Km/L', 'Km/kWh'];
+    const dataRows = rows.map(r => {
+      const base: (string | number | null)[] = [
+        r.label, r.totalLoads,
+        Number(r.totalLitersFuel.toFixed(1)),
+        Number(r.totalKwhElec.toFixed(1)),
+        Number(r.fuelCost.toFixed(2)),
+      ];
+      if (isVehicles) { base.push(r.maintenanceCount, Number(r.maintenanceCost.toFixed(2))); }
+      base.push(
+        Number((r.fuelCost + r.maintenanceCost).toFixed(2)),
+        Number(r.totalKm.toFixed(0)),
+        r.avgKmPerLiter != null ? Number(r.avgKmPerLiter.toFixed(2)) : '',
+        r.avgKmPerKwh   != null ? Number(r.avgKmPerKwh.toFixed(2))   : '',
+      );
+      return base;
+    });
+    const totalRow: (string | number | null)[] = isVehicles
+      ? ['TOTAL', totals.totalLoads, Number(totals.totalLitersFuel.toFixed(1)), Number(totals.totalKwhElec.toFixed(1)), Number(totals.totalFuelCost.toFixed(2)), rows.reduce((s, r) => s + r.maintenanceCount, 0), Number(totals.totalMaintCost.toFixed(2)), Number(totals.totalCost.toFixed(2)), Number(totals.totalKm.toFixed(0)), totals.avgKmPerLiterFuel != null ? Number(totals.avgKmPerLiterFuel.toFixed(2)) : '', totals.avgKmPerKwhElec != null ? Number(totals.avgKmPerKwhElec.toFixed(2)) : '']
+      : ['TOTAL', totals.totalLoads, Number(totals.totalLitersFuel.toFixed(1)), Number(totals.totalKwhElec.toFixed(1)), Number(totals.totalFuelCost.toFixed(2)), Number(totals.totalCost.toFixed(2)), Number(totals.totalKm.toFixed(0)), totals.avgKmPerLiterFuel != null ? Number(totals.avgKmPerLiterFuel.toFixed(2)) : '', totals.avgKmPerKwhElec != null ? Number(totals.avgKmPerKwhElec.toFixed(2)) : ''];
+    const csv = '\uFEFF' + [headers, ...dataRows, totalRow].map(row => (row as (string | number | null)[]).map(esc).join(',')).join('\n');
+    const a = Object.assign(document.createElement('a'), {
+      href: URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' })),
+      download: `dashboard-${mode}-${yearMonth}.csv`,
+    });
+    a.click(); URL.revokeObjectURL(a.href);
+  };
+
   // Derived aggregated stats
   const rows = useMemo(
     () => aggregateStats(loads, maintenances, mode),
@@ -196,13 +244,17 @@ export default function DashboardPage() {
 
   const totals = useMemo(() => {
     const totalLoads         = rows.reduce((s, r) => s + r.totalLoads, 0);
-    const totalLiters        = rows.reduce((s, r) => s + r.totalLiters, 0);
+    const totalLitersFuel    = rows.reduce((s, r) => s + r.totalLitersFuel, 0);
+    const totalKwhElec       = rows.reduce((s, r) => s + r.totalKwhElec, 0);
     const totalKm            = rows.reduce((s, r) => s + r.totalKm, 0);
     const totalFuelCost      = rows.reduce((s, r) => s + r.fuelCost, 0);
     const totalMaintCost     = rows.reduce((s, r) => s + r.maintenanceCost, 0);
     const totalCost          = totalFuelCost + totalMaintCost;
-    const avgKmPerLiter      = totalKm > 0 && totalLiters > 0 ? totalKm / totalLiters : null;
-    return { totalLoads, totalLiters, totalKm, totalFuelCost, totalMaintCost, totalCost, avgKmPerLiter };
+    const kmFuelAccum        = rows.reduce((s, r) => s + r.kmFuelAccum, 0);
+    const kmElecAccum        = rows.reduce((s, r) => s + r.kmElecAccum, 0);
+    const avgKmPerLiterFuel  = kmFuelAccum > 0 && totalLitersFuel > 0 ? kmFuelAccum / totalLitersFuel : null;
+    const avgKmPerKwhElec    = kmElecAccum > 0 && totalKwhElec > 0   ? kmElecAccum / totalKwhElec   : null;
+    return { totalLoads, totalLitersFuel, totalKwhElec, totalKm, totalFuelCost, totalMaintCost, totalCost, avgKmPerLiterFuel, avgKmPerKwhElec };
   }, [rows]);
 
   const entityCount = mode === 'vehicles' ? totalVehicles : totalDrivers;
@@ -252,6 +304,17 @@ export default function DashboardPage() {
           </select>
           <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
         </div>
+
+        {/* CSV Download */}
+        {user?.canDownloadMetrics && (
+          <button
+            onClick={downloadCSV}
+            className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-600 shadow-sm hover:bg-slate-50 hover:text-slate-800 transition-colors"
+          >
+            <Download className="h-3.5 w-3.5" />
+            Descargar CSV
+          </button>
+        )}
       </div>
 
       {/* Summary cards — 2 rows of 3 */}
@@ -297,14 +360,35 @@ export default function DashboardPage() {
           iconBg="bg-purple-50"
           iconColor="text-purple-600"
         />
-        <SummaryCard
-          title="Rendimiento promedio"
-          value={totals.avgKmPerLiter != null ? formatNumber(totals.avgKmPerLiter, 2) : '—'}
-          unit={totals.avgKmPerLiter != null ? 'km/L' : undefined}
-          icon={Gauge}
-          iconBg="bg-amber-50"
-          iconColor="text-amber-600"
-        />
+        {totals.avgKmPerLiterFuel != null && (
+          <SummaryCard
+            title="Rendimiento km/L"
+            value={formatNumber(totals.avgKmPerLiterFuel, 2)}
+            unit="km/L"
+            icon={Gauge}
+            iconBg="bg-amber-50"
+            iconColor="text-amber-600"
+          />
+        )}
+        {totals.avgKmPerKwhElec != null && (
+          <SummaryCard
+            title="Rendimiento km/kWh"
+            value={formatNumber(totals.avgKmPerKwhElec, 2)}
+            unit="km/kWh"
+            icon={Gauge}
+            iconBg="bg-emerald-50"
+            iconColor="text-emerald-600"
+          />
+        )}
+        {totals.avgKmPerLiterFuel == null && totals.avgKmPerKwhElec == null && (
+          <SummaryCard
+            title="Rendimiento promedio"
+            value="—"
+            icon={Gauge}
+            iconBg="bg-amber-50"
+            iconColor="text-amber-600"
+          />
+        )}
       </div>
 
       {/* Detail table */}
@@ -334,7 +418,7 @@ export default function DashboardPage() {
                 <tr>
                   <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">{mode === 'vehicles' ? 'Vehículo' : 'Conductor'}</th>
                   <th className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Repostajes</th>
-                  <th className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Litros</th>
+                  <th className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Combustible</th>
                   <th className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Gasto combust.</th>
                   {mode === 'vehicles' && <th className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Mant.</th>}
                   {mode === 'vehicles' && <th className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Gasto mant.</th>}
@@ -348,16 +432,28 @@ export default function DashboardPage() {
                   <tr key={r.id} className="hover:bg-slate-50/60 transition-colors">
                     <td className="px-5 py-3 font-medium text-slate-800">{r.label}</td>
                     <td className="px-5 py-3 text-right text-slate-600">{r.totalLoads}</td>
-                    <td className="px-5 py-3 text-right text-slate-600">{formatNumber(r.totalLiters, 1)} L</td>
+                    <td className="px-5 py-3 text-right text-slate-600">
+                      {r.totalLitersFuel > 0 && <span>{formatNumber(r.totalLitersFuel, 1)} L</span>}
+                      {r.totalLitersFuel > 0 && r.totalKwhElec > 0 && <br />}
+                      {r.totalKwhElec > 0 && <span>{formatNumber(r.totalKwhElec, 1)} kWh</span>}
+                      {r.totalLitersFuel === 0 && r.totalKwhElec === 0 && '—'}
+                    </td>
                     <td className="px-5 py-3 text-right text-slate-600">{r.fuelCost > 0 ? formatCurrency(r.fuelCost) : '—'}</td>
                     {mode === 'vehicles' && <td className="px-5 py-3 text-right text-slate-600">{r.maintenanceCount || '—'}</td>}
                     {mode === 'vehicles' && <td className="px-5 py-3 text-right text-slate-600">{r.maintenanceCost > 0 ? formatCurrency(r.maintenanceCost) : '—'}</td>}
                     <td className="px-5 py-3 text-right font-semibold text-slate-800">{formatCurrency(r.fuelCost + r.maintenanceCost)}</td>
                     <td className="px-5 py-3 text-right text-slate-600">{r.totalKm > 0 ? formatNumber(r.totalKm, 0) + ' km' : '—'}</td>
                     <td className="px-5 py-3 text-right">
-                      {r.avgKmPerLiter != null
-                        ? <span className="font-semibold text-brand-600">{formatNumber(r.avgKmPerLiter, 2)} km/L</span>
-                        : <span className="text-slate-400">—</span>}
+                      {r.avgKmPerLiter != null && (
+                        <span className="font-semibold text-brand-600">{formatNumber(r.avgKmPerLiter, 2)} km/L</span>
+                      )}
+                      {r.avgKmPerLiter != null && r.avgKmPerKwh != null && <br />}
+                      {r.avgKmPerKwh != null && (
+                        <span className="font-semibold text-emerald-600">{formatNumber(r.avgKmPerKwh, 2)} km/kWh</span>
+                      )}
+                      {r.avgKmPerLiter == null && r.avgKmPerKwh == null && (
+                        <span className="text-slate-400">—</span>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -367,13 +463,25 @@ export default function DashboardPage() {
                   <tr>
                     <td className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500">Total</td>
                     <td className="px-5 py-3 text-right text-sm font-semibold text-slate-700">{totals.totalLoads}</td>
-                    <td className="px-5 py-3 text-right text-sm font-semibold text-slate-700">{formatNumber(totals.totalLiters, 1)} L</td>
+                    <td className="px-5 py-3 text-right text-sm font-semibold text-slate-700">
+                      {totals.totalLitersFuel > 0 && <span>{formatNumber(totals.totalLitersFuel, 1)} L</span>}
+                      {totals.totalLitersFuel > 0 && totals.totalKwhElec > 0 && <br />}
+                      {totals.totalKwhElec > 0 && <span>{formatNumber(totals.totalKwhElec, 1)} kWh</span>}
+                    </td>
                     <td className="px-5 py-3 text-right text-sm font-semibold text-slate-700">{formatCurrency(totals.totalFuelCost)}</td>
                     {mode === 'vehicles' && <td className="px-5 py-3 text-right text-sm font-semibold text-slate-700">{rows.reduce((s,r) => s + r.maintenanceCount, 0) || '—'}</td>}
                     {mode === 'vehicles' && <td className="px-5 py-3 text-right text-sm font-semibold text-slate-700">{formatCurrency(totals.totalMaintCost)}</td>}
                     <td className="px-5 py-3 text-right text-sm font-semibold text-slate-800">{formatCurrency(totals.totalCost)}</td>
                     <td className="px-5 py-3 text-right text-sm font-semibold text-slate-700">{totals.totalKm > 0 ? formatNumber(totals.totalKm, 0) + ' km' : '—'}</td>
-                    <td className="px-5 py-3 text-right text-sm font-semibold text-brand-600">{totals.avgKmPerLiter != null ? formatNumber(totals.avgKmPerLiter, 2) + ' km/L' : '—'}</td>
+                    <td className="px-5 py-3 text-right text-sm font-semibold">
+                      {totals.avgKmPerLiterFuel != null && (
+                        <span className="block text-brand-600">{formatNumber(totals.avgKmPerLiterFuel, 2)} km/L</span>
+                      )}
+                      {totals.avgKmPerKwhElec != null && (
+                        <span className="block text-emerald-600">{formatNumber(totals.avgKmPerKwhElec, 2)} km/kWh</span>
+                      )}
+                      {totals.avgKmPerLiterFuel == null && totals.avgKmPerKwhElec == null && '—'}
+                    </td>
                   </tr>
                 </tfoot>
               )}
